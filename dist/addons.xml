@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<addons>
+    <addon id="plugin.video.xvault" version="2026.09.05.1" name="[B]xVAULT[/B]" provider-name="xVAULT">
+        <requires>
+            <import addon="xbmc.python" version="3.0.0" />
+            <import addon="script.module.requests" optional="true" />
+            <import addon="script.module.download-m3u8" optional="true" />
+            <import addon="script.module.six" optional="true" />
+            <import addon="script.module.pyaes" optional="true" />
+            <import addon="script.module.pyqrcode" optional="true" />
+            <import addon="script.module.infotagger" optional="true" />
+            <import addon="script.module.resolveurl" version="5.1.100" optional="true" />
+            <import addon="inputstream.adaptive" optional="true" />
+            <import addon="inputstream.ffmpegdirect" optional="true" />
+            <import addon="inputstream.rtmp" optional="true" />
+            <import addon="plugin.video.youtube" optional="true" />
+            <import addon="script.module.pydevd" optional="true" />
+        </requires>
+        <extension point="xbmc.python.pluginsource" library="default.py">
+            <provides>video</provides>
+        </extension>
+        <extension point="xbmc.service" library="service.py" start="startup" />
+        <extension point="xbmc.addon.metadata">
+            <summary lang="de_DE">Filme, Serien und LiveTV durchsuchen und wiedergeben</summary>
+            <summary lang="en_GB">Browse and play movies, TV shows and live TV</summary>
+            <description lang="de_DE">xVAULT ist ein Kodi-Video-Add-on zum Suchen, Verwalten und Wiedergeben von Filmen, Serien und LiveTV mit Quellenwahl, Favoriten, Wiedergabestatus und optionaler Synchronisation. Die offizielle Repository- und Updateadresse ist http://xvault.ddnss.de/. Support kann nur für Installationen aus dem offiziellen xVAULT-Repository geleistet werden; Pakete aus fremden Repositories, Reuploads oder veränderte Versionen lassen sich nicht zuverlässig prüfen.</description>
+            <description lang="en_GB">xVAULT is a Kodi video add-on for browsing and playing movies, TV shows and live TV with source selection, favorites, watched status and optional synchronization. The official repository and update address is http://xvault.ddnss.de/. Support is available only for installations from the official xVAULT repository; packages from third-party repositories, reuploads or modified builds cannot be verified reliably.</description>
+            <website>http://xvault.ddnss.de/</website>
+            <platform>all</platform>
+            <assets>
+                <icon>resources/icon.png</icon>
+                <fanart>resources/fanart.png</fanart>
+                <banner>resources/media/banner.png</banner>
+            </assets>
+        </extension>
+    </addon>
+    <addon id="repository.xvault" name="xVAULT Repository" provider-name="xVAULT" version="1.0.2">
+        <extension point="xbmc.addon.repository" name="xVAULT Repository">
+            <dir>
+                <info compressed="false">http://xvault.ddnss.de/addons.xml</info>
+                <checksum>http://xvault.ddnss.de/addons.xml.md5</checksum>
+                <datadir zip="true">http://xvault.ddnss.de/</datadir>
+            </dir>
+        </extension>
+        <extension point="xbmc.addon.metadata">
+            <summary lang="de_DE">Offizielles xVAULT Kodi-Repository</summary>
+            <summary lang="en_GB">Official xVAULT Kodi repository</summary>
+            <description lang="de_DE">Stellt xVAULT-Updates ueber Kodi bereit.</description>
+            <description lang="en_GB">Provides xVAULT updates through Kodi.</description>
+            <platform>all</platform>
+            <assets>
+                <icon>icon.png</icon>
+            </assets>
+        </extension>
+    </addon>
+    <addon id="service.xvault.liquid.promos" version="0.1.7" name="xVAULT Liquid Promos" provider-name="xVAULT">
+        <requires>
+            <import addon="xbmc.python" version="3.0.0" />
+        </requires>
+        <extension point="xbmc.service" library="service.py" start="login" />
+        <extension point="xbmc.python.script" library="service.py" />
+        <extension point="xbmc.addon.metadata">
+            <platform>all</platform>
+            <license>GPL-2.0-or-later, CC BY-SA 4.0</license>
+            <summary lang="en_GB">Refreshes current TV promo backgrounds for xVAULT Liquid.</summary>
+            <summary lang="de_DE">Aktualisiert aktuelle Serien-Promo-Hintergruende fuer xVAULT Liquid.</summary>
+            <description lang="en_GB">Downloads current German series backdrop images and metadata from JustWatch into the xVAULT Liquid skin promo folder.</description>
+            <description lang="de_DE">Laedt aktuelle deutsche Serien-Backdrops und Metadaten von JustWatch in den Promo-Ordner des xVAULT-Liquid-Skins.</description>
+            <assets>
+                <icon>icon.png</icon>
+            </assets>
+            <source>https://www.justwatch.com/de/Serien</source>
+        </extension>
+    </addon>
+    <addon id="skin.xvault.liquid" version="0.1.7" name="xVAULT Liquid" provider-name="xVAULT">
+        <requires>
+            <import addon="xbmc.gui" version="5.18.0" />
+            <import addon="service.xvault.liquid.promos" version="0.1.7" />
+        </requires>
+        <extension point="xbmc.gui.skin" debugging="false">
+            <res width="1920" height="1440" aspect="4:3" default="false" folder="xml" />
+            <res width="1920" height="1280" aspect="3:2" default="false" folder="xml" />
+            <res width="1920" height="1200" aspect="16:10" default="false" folder="xml" />
+            <res width="2040" height="1080" aspect="17:9" default="false" folder="xml" />
+            <res width="1920" height="1080" aspect="16:9" default="true" folder="xml" />
+            <res width="2560" height="1080" aspect="21:9" default="false" folder="xml" />
+            <res width="2338" height="1080" aspect="19.5:9" default="false" folder="xml" />
+            <res width="2160" height="1080" aspect="18:9" default="false" folder="xml" />
+        </extension>
+        <extension point="xbmc.addon.metadata">
+            <platform>all</platform>
+            <license>GPL-2.0-or-later, CC BY-SA 4.0</license>
+            <summary lang="en_GB">A cinematic Kodi skin inspired by the glassy Apple TV 2026 desktop.</summary>
+            <summary lang="de_DE">Ein cineastischer Kodi-Skin im Glas-Look des Apple-TV-2026-Desktops.</summary>
+            <description lang="en_GB">xVAULT Liquid keeps the media art in focus with a full-screen promo slider, translucent controls, dock navigation, and a small service that refreshes current German series promo images from JustWatch.</description>
+            <description lang="de_DE">xVAULT Liquid stellt Medienkunst in den Mittelpunkt: Vollbild-Promo-Slider, transluzente Bedienelemente, Dock-Navigation und ein kleiner Service fuer aktuelle deutsche Serienbilder von JustWatch.</description>
+            <assets>
+                <icon>resources/icon.png</icon>
+                <fanart>resources/fanart.png</fanart>
+                <screenshot>resources/fanart.png</screenshot>
+            </assets>
+            <source>https://www.justwatch.com/de/Serien</source>
+            <news>0.1.7 - Install the promo service as a skin dependency and keep xVAULT video integration optional.</news>
+        </extension>
+    </addon>
+</addons>

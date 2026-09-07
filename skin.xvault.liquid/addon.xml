@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="skin.xvault.liquid" version="0.1.7" name="xVAULT Liquid" provider-name="xVAULT">
+	<requires>
+		<import addon="xbmc.gui" version="5.18.0"/>
+		<import addon="service.xvault.liquid.promos" version="0.1.7"/>
+	</requires>
+	<extension point="xbmc.gui.skin" debugging="false">
+		<res width="1920" height="1440" aspect="4:3" default="false" folder="xml"/>
+		<res width="1920" height="1280" aspect="3:2" default="false" folder="xml"/>
+		<res width="1920" height="1200" aspect="16:10" default="false" folder="xml"/>
+		<res width="2040" height="1080" aspect="17:9" default="false" folder="xml"/>
+		<res width="1920" height="1080" aspect="16:9" default="true" folder="xml"/>
+		<res width="2560" height="1080" aspect="21:9" default="false" folder="xml"/>
+		<res width="2338" height="1080" aspect="19.5:9" default="false" folder="xml"/>
+		<res width="2160" height="1080" aspect="18:9" default="false" folder="xml"/>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<license>GPL-2.0-or-later, CC BY-SA 4.0</license>
+		<summary lang="en_GB">A cinematic Kodi skin inspired by the glassy Apple TV 2026 desktop.</summary>
+		<summary lang="de_DE">Ein cineastischer Kodi-Skin im Glas-Look des Apple-TV-2026-Desktops.</summary>
+		<description lang="en_GB">xVAULT Liquid keeps the media art in focus with a full-screen promo slider, translucent controls, dock navigation, and a small service that refreshes current German series promo images from JustWatch.</description>
+		<description lang="de_DE">xVAULT Liquid stellt Medienkunst in den Mittelpunkt: Vollbild-Promo-Slider, transluzente Bedienelemente, Dock-Navigation und ein kleiner Service fuer aktuelle deutsche Serienbilder von JustWatch.</description>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.png</fanart>
+			<screenshot>resources/fanart.png</screenshot>
+		</assets>
+		<source>https://www.justwatch.com/de/Serien</source>
+		<news>0.1.7 - Install the promo service as a skin dependency and keep xVAULT video integration optional.</news>
+	</extension>
+</addon>

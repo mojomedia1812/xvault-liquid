@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<defaultcontrol always="true">9100</defaultcontrol>
+	<backgroundcolor>ff05070c</backgroundcolor>
+	<onload>Skin.SetBool(xvault_liquid_home_ready)</onload>
+	<controls>
+		<control type="image">
+			<left>-10%</left>
+			<top>0</top>
+			<width>120%</width>
+			<height>100%</height>
+			<texture background="true">promos/00-liquid-wall.png</texture>
+			<aspectratio align="center" aligny="center">scale</aspectratio>
+			<visible>String.IsEmpty(Window(Home).Property(xvault_liquid_promo_image))</visible>
+		</control>
+		<control type="image">
+			<left>-10%</left>
+			<top>0</top>
+			<width>120%</width>
+			<height>100%</height>
+			<texture background="true">$INFO[Window(Home).Property(xvault_liquid_promo_image)]</texture>
+			<aspectratio align="center" aligny="center">scale</aspectratio>
+			<visible>!String.IsEmpty(Window(Home).Property(xvault_liquid_promo_image))</visible>
+			<animation effect="fade" start="0" end="100" time="650">VisibleChange</animation>
+		</control>
+
+		<control type="image">
+			<left>0</left>
+			<top>0</top>
+			<width>62%</width>
+			<height>100%</height>
+			<texture>textures/gradient-left.png</texture>
+		</control>
+		<control type="image">
+			<left>0</left>
+			<top>0</top>
+			<width>100%</width>
+			<height>28%</height>
+			<texture>textures/gradient-top.png</texture>
+		</control>
+		<control type="image">
+			<left>0</left>
+			<bottom>0</bottom>
+			<width>100%</width>
+			<height>52%</height>
+			<texture>textures/gradient-bottom.png</texture>
+		</control>
+
+		<control type="group">
+			<left>4%</left>
+			<top>5%</top>
+			<width>92%</width>
+			<height>100</height>
+			<control type="label">
+				<left>0</left>
+				<top>0</top>
+				<width>430</width>
+				<height>44</height>
+				<font>font32_title</font>
+				<label>xVAULT</label>
+				<textcolor>ffffffff</textcolor>
+				<shadowcolor>aa000000</shadowcolor>
+			</control>
+			<control type="label">
+				<left>0</left>
+				<top>42</top>
+				<width>640</width>
+				<height>36</height>
+				<font>font13</font>
+				<label>$INFO[System.Date]   $INFO[System.Time]</label>
+				<textcolor>ccffffff</textcolor>
+				<shadowcolor>aa000000</shadowcolor>
+			</control>
+			<control type="grouplist" id="9050">
+				<right>0</right>
+				<top>0</top>
+				<width>350</width>
+				<height>86</height>
+				<orientation>horizontal</orientation>
+				<itemgap>14</itemgap>
+				<onleft>9050</onleft>
+				<onright>9050</onright>
+				<ondown>9000</ondown>
+				<control type="button" id="9051">
+					<width>86</width>
+					<height>86</height>
+					<label></label>
+					<onclick>ActivateWindow(1107)</onclick>
+					<texturefocus border="28">textures/tile-focus.png</texturefocus>
+					<texturenofocus border="28">textures/tile.png</texturenofocus>
+				</control>
+				<control type="button" id="9052">
+					<width>86</width>
+					<height>86</height>
+					<label></label>
+					<onclick>ActivateWindow(settings)</onclick>
+					<texturefocus border="28">textures/tile-focus.png</texturefocus>
+					<texturenofocus border="28">textures/tile.png</texturenofocus>
+				</control>
+				<control type="button" id="9053">
+					<width>86</width>
+					<height>86</height>
+					<label></label>
+					<onclick>ActivateWindow(shutdownmenu)</onclick>
+					<texturefocus border="28">textures/tile-focus.png</texturefocus>
+					<texturenofocus border="28">textures/tile.png</texturenofocus>
+				</control>
+			</control>
+			<control type="image">
+				<right>290</right>
+				<top>26</top>
+				<width>34</width>
+				<height>34</height>
+				<texture>icons/search.png</texture>
+			</control>
+			<control type="image">
+				<right>190</right>
+				<top>26</top>
+				<width>34</width>
+				<height>34</height>
+				<texture>icons/settings.png</texture>
+			</control>
+			<control type="image">
+				<right>90</right>
+				<top>26</top>
+				<width>34</width>
+				<height>34</height>
+				<texture>icons/power.png</texture>
+			</control>
+		</control>
+
+		<control type="group">
+			<left>4%</left>
+			<top>21%</top>
+			<width>43%</width>
+			<height>330</height>
+			<control type="image">
+				<left>0</left>
+				<top>0</top>
+				<width>100%</width>
+				<height>330</height>
+				<texture border="34">textures/glass-panel.png</texture>
+			</control>
+			<control type="image">
+				<left>0</left>
+				<top>0</top>
+				<width>100%</width>
+				<height>330</height>
+				<texture border="34">textures/glass-panel-focus.png</texture>
+				<visible>Control.HasFocus(9000)</visible>
+			</control>
+			<control type="label">
+				<left>46</left>
+				<top>34</top>
+				<right>46</right>
+				<height>46</height>
+				<font>font25_title</font>
+				<label>Heute im Spotlight</label>
+				<textcolor>eaffffff</textcolor>
+				<shadowcolor>aa000000</shadowcolor>
+			</control>
+			<control type="label">
+				<left>44</left>
+				<top>80</top>
+				<right>46</right>
+				<height>64</height>
+				<font>font36_title</font>
+				<label>Serien, die gerade laufen</label>
+				<textcolor>ffffffff</textcolor>
+				<shadowcolor>cc000000</shadowcolor>
+				<visible>String.IsEmpty(Window(Home).Property(xvault_liquid_promo_title))</visible>
+			</control>
+			<control type="label">
+				<left>44</left>
+				<top>80</top>
+				<right>46</right>
+				<height>64</height>
+				<font>font36_title</font>
+				<label>$INFO[Window(Home).Property(xvault_liquid_promo_title)]</label>
+				<textcolor>ffffffff</textcolor>
+				<shadowcolor>cc000000</shadowcolor>
+				<visible>!String.IsEmpty(Window(Home).Property(xvault_liquid_promo_title))</visible>
+			</control>
+			<control type="label">
+				<left>46</left>
+				<top>146</top>
+				<right>46</right>
+				<height>34</height>
+				<font>font12</font>
+				<label>$INFO[Window(Home).Property(xvault_liquid_promo_meta)]</label>
+				<textcolor>c8ffffff</textcolor>
+				<shadowcolor>aa000000</shadowcolor>
+				<visible>!String.IsEmpty(Window(Home).Property(xvault_liquid_promo_meta))</visible>
+			</control>
+			<control type="label">
+				<right>46</right>
+				<top>34</top>
+				<width>72</width>
+				<height>34</height>
+				<align>right</align>
+				<font>font12</font>
+				<label>$INFO[Window(Home).Property(xvault_liquid_promo_position)]</label>
+				<textcolor>aaffffff</textcolor>
+				<shadowcolor>aa000000</shadowcolor>
+				<visible>!String.IsEmpty(Window(Home).Property(xvault_liquid_promo_position))</visible>
+			</control>
+			<control type="textbox">
+				<left>46</left>
+				<top>190</top>
+				<right>46</right>
+				<height>112</height>
+				<font>font12</font>
+				<label>Der Hintergrund-Slider aktualisiert Promo- und Episodenbilder aktueller Serien und legt sie lokal im Skin ab. Fokus bleibt auf dem Artwork, die Navigation schwebt darueber.</label>
+				<textcolor>d8ffffff</textcolor>
+				<shadowcolor>aa000000</shadowcolor>
+				<autoscroll>false</autoscroll>
+				<visible>String.IsEmpty(Window(Home).Property(xvault_liquid_promo_summary))</visible>
+			</control>
+			<control type="textbox">
+				<left>46</left>
+				<top>190</top>
+				<right>46</right>
+				<height>112</height>
+				<font>font12</font>
+				<label>$INFO[Window(Home).Property(xvault_liquid_promo_summary)]</label>
+				<textcolor>d8ffffff</textcolor>
+				<shadowcolor>aa000000</shadowcolor>
+				<autoscroll>false</autoscroll>
+				<visible>!String.IsEmpty(Window(Home).Property(xvault_liquid_promo_summary))</visible>
+			</control>
+			<control type="button" id="9000">
+				<left>0</left>
+				<top>0</top>
+				<width>100%</width>
+				<height>330</height>
+				<label></label>
+				<onclick>RunScript(service.xvault.liquid.promos,--open-spotlight)</onclick>
+				<onup>9050</onup>
+				<ondown condition="Library.HasContent(tvshows)">9300</ondown>
+				<ondown condition="!Library.HasContent(tvshows)">9100</ondown>
+				<onleft>9000</onleft>
+				<onright>9000</onright>
+				<texturefocus colordiffuse="00ffffff">textures/white.png</texturefocus>
+				<texturenofocus colordiffuse="00ffffff">textures/white.png</texturenofocus>
+			</control>
+		</control>
+
+		<control type="label">
+			<left>4%</left>
+			<bottom>476</bottom>
+			<width>28%</width>
+			<height>36</height>
+			<font>font13</font>
+			<label>Aktuell aus deiner Bibliothek</label>
+			<textcolor>ccffffff</textcolor>
+			<shadowcolor>cc000000</shadowcolor>
+			<visible>Library.HasContent(tvshows)</visible>
+		</control>
+
+		<control type="panel" id="9300">
+			<left>4%</left>
+			<bottom>234</bottom>
+			<width>92%</width>
+			<height>246</height>
+			<orientation>horizontal</orientation>
+			<onup>9000</onup>
+			<ondown>9100</ondown>
+			<onleft>9300</onleft>
+			<onright>9300</onright>
+			<scrolltime tween="cubic" easing="out">360</scrolltime>
+			<visible>Library.HasContent(tvshows)</visible>
+			<itemlayout width="300" height="230">
+				<control type="image">
+					<left>10</left>
+					<top>16</top>
+					<width>276</width>
+					<height>156</height>
+					<texture background="true">$INFO[ListItem.Art(thumb)]</texture>
+					<aspectratio>scale</aspectratio>
+				</control>
+				<control type="image">
+					<left>10</left>
+					<top>16</top>
+					<width>276</width>
+					<height>156</height>
+					<texture border="20">textures/poster-card.png</texture>
+				</control>
+				<control type="label">
+					<left>10</left>
+					<top>180</top>
+					<width>276</width>
+					<height>28</height>
+					<font>font12</font>
+					<label>$INFO[ListItem.TVShowTitle]</label>
+					<textcolor>ddffffff</textcolor>
+					<shadowcolor>cc000000</shadowcolor>
+				</control>
+			</itemlayout>
+			<focusedlayout width="326" height="244">
+				<control type="group">
+					<animation effect="zoom" start="100" end="108" center="auto" time="160" tween="sine" easing="out">Focus</animation>
+					<control type="image">
+						<left>12</left>
+						<top>14</top>
+						<width>300</width>
+						<height>170</height>
+						<texture background="true">$INFO[ListItem.Art(thumb)]</texture>
+						<aspectratio>scale</aspectratio>
+					</control>
+					<control type="image">
+						<left>0</left>
+						<top>0</top>
+						<width>324</width>
+						<height>206</height>
+						<texture border="28">textures/poster-card-focus.png</texture>
+					</control>
+					<control type="label">
+						<left>14</left>
+						<top>190</top>
+						<width>296</width>
+						<height>32</height>
+						<font>font13</font>
+						<label>$INFO[ListItem.TVShowTitle]</label>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>cc000000</shadowcolor>
+					</control>
+				</control>
+			</focusedlayout>
+			<content target="videos" sortby="dateadded" sortorder="descending" limit="12">videodb://recentlyaddedepisodes/</content>
+		</control>
+
+		<control type="image">
+			<centerleft>50%</centerleft>
+			<bottom>38</bottom>
+			<width>86%</width>
+			<height>210</height>
+			<texture border="38">textures/dock.png</texture>
+		</control>
+		<control type="fixedlist" id="9100">
+			<centerleft>50%</centerleft>
+			<bottom>46</bottom>
+			<width>84%</width>
+			<height>194</height>
+			<orientation>horizontal</orientation>
+			<focusposition>2</focusposition>
+			<movement>2</movement>
+			<onup>9000</onup>
+			<ondown>9050</ondown>
+			<onleft>9100</onleft>
+			<onright>9100</onright>
+			<scrolltime tween="cubic" easing="out">320</scrolltime>
+			<itemlayout width="196" height="184">
+				<control type="image">
+					<left>22</left>
+					<top>12</top>
+					<width>150</width>
+					<height>112</height>
+					<texture border="28">textures/tile.png</texture>
+				</control>
+				<control type="image">
+					<left>63</left>
+					<top>38</top>
+					<width>68</width>
+					<height>68</height>
+					<texture>$INFO[ListItem.Icon]</texture>
+				</control>
+				<control type="label">
+					<left>4</left>
+					<top>132</top>
+					<width>188</width>
+					<height>38</height>
+					<align>center</align>
+					<aligny>center</aligny>
+					<font>font12</font>
+					<label>$INFO[ListItem.Label]</label>
+					<textcolor>ccffffff</textcolor>
+					<shadowcolor>aa000000</shadowcolor>
+				</control>
+			</itemlayout>
+			<focusedlayout width="216" height="194">
+				<control type="group">
+					<animation effect="zoom" start="100" end="112" center="auto" time="170" tween="sine" easing="out">Focus</animation>
+					<animation effect="zoom" start="112" end="100" center="auto" time="120" tween="sine" easing="in">UnFocus</animation>
+					<control type="image">
+						<left>15</left>
+						<top>2</top>
+						<width>186</width>
+						<height>138</height>
+						<texture border="32">textures/tile-focus.png</texture>
+					</control>
+					<control type="image">
+						<left>69</left>
+						<top>36</top>
+						<width>78</width>
+						<height>78</height>
+						<texture>$INFO[ListItem.Icon]</texture>
+					</control>
+					<control type="label">
+						<left>0</left>
+						<top>143</top>
+						<width>216</width>
+						<height>42</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<font>font13</font>
+						<label>$INFO[ListItem.Label]</label>
+						<textcolor>ffffffff</textcolor>
+						<shadowcolor>cc000000</shadowcolor>
+					</control>
+				</control>
+			</focusedlayout>
+			<content>
+				<item>
+					<label>Serien</label>
+					<icon>icons/tv.png</icon>
+					<onclick condition="Library.HasContent(tvshows)">ActivateWindow(Videos,videodb://tvshows/titles/,return)</onclick>
+					<onclick condition="!Library.HasContent(tvshows)">ActivateWindow(Videos,sources://video/,return)</onclick>
+				</item>
+				<item>
+					<label>Filme</label>
+					<icon>icons/movies.png</icon>
+					<onclick condition="Library.HasContent(movies)">ActivateWindow(Videos,videodb://movies/titles/,return)</onclick>
+					<onclick condition="!Library.HasContent(movies)">ActivateWindow(Videos,sources://video/,return)</onclick>
+				</item>
+				<item>
+					<label>Musik</label>
+					<icon>icons/music.png</icon>
+					<onclick>ActivateWindow(Music,root,return)</onclick>
+				</item>
+				<item>
+					<label>Add-ons</label>
+					<icon>icons/addons.png</icon>
+					<onclick>ActivateWindow(1100)</onclick>
+				</item>
+				<item>
+					<label>Dateien</label>
+					<icon>icons/files.png</icon>
+					<onclick>ActivateWindow(FileManager)</onclick>
+				</item>
+				<item>
+					<label>Favoriten</label>
+					<icon>icons/star.png</icon>
+					<onclick>ActivateWindow(favouritesbrowser)</onclick>
+				</item>
+			</content>
+		</control>
+	</controls>
+</window>
