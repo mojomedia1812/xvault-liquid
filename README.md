@@ -8,7 +8,7 @@ Kodi skin fuer eine tvOS-26-inspirierte Wohnzimmeroberflaeche: grosser Serien-Pr
 - `service.xvault.liquid.promos`: Companion-Service fuer aktuelle deutsche Serien-Backdrops und Spotlight-Metadaten.
 - `repository.xvault`: Repository-Add-on fuer den ZIP-Einstieg in Kodi.
 - `dist/addons.xml` und `dist/addons.xml.md5`: fertige Kodi-Repository-Metadaten.
-- `dist/xvault-repo-upload-0.1.7.zip`: Upload-Paket fuer den xVAULT-Repo-Webroot ohne HTML/Pages.
+- `dist/xvault-repo-upload-0.1.8.zip`: Upload-Paket fuer den xVAULT-Repo-Webroot ohne HTML/Pages.
 
 ## Funktionen
 
@@ -27,19 +27,21 @@ Kodi skin fuer eine tvOS-26-inspirierte Wohnzimmeroberflaeche: grosser Serien-Pr
 2. `dist/repository.xvault-1.0.2.zip` installieren, falls das xVAULT Repository noch nicht vorhanden ist.
 3. Aus dem xVAULT Repository `xVAULT Liquid` installieren.
 4. Der Promo-Service `service.xvault.liquid.promos` wird als Skin-Abhaengigkeit automatisch mitinstalliert.
-5. Danach Skin wechseln: Einstellungen -> Interface -> Skin -> `xVAULT Liquid`.
+5. Kodi laedt ausserdem das Standardpaket `resource.images.weathericons.default` aus dem offiziellen Kodi-Repository nach, falls es noch fehlt.
+6. Danach Skin wechseln: Einstellungen -> Interface -> Skin -> `xVAULT Liquid`.
 
 ### Manueller Test
 
 Installiere diese beiden ZIPs nacheinander:
 
 - `dist/service.xvault.liquid.promos-0.1.7.zip`
-- `dist/skin.xvault.liquid-0.1.7.zip`
+- `dist/skin.xvault.liquid-0.1.8.zip`
 
 ## Abhaengigkeiten
 
 - Kodi mit `xbmc.gui` 5.18.0 oder kompatibel.
 - `xbmc.python` 3.0.0 fuer den Promo-Service.
+- `resource.images.weathericons.default` fuer die Skin-Weather-Icons.
 - `service.xvault.liquid.promos` wird vom Skin automatisch benoetigt und mitinstalliert.
 - `plugin.video.xvault` ist optional. Es wird nicht automatisch installiert und nur genutzt, wenn es bereits vorhanden ist.
 
@@ -55,10 +57,12 @@ Das erzeugt:
 
 - `dist/repository.xvault-1.0.2.zip`
 - `dist/service.xvault.liquid.promos-0.1.7.zip`
-- `dist/skin.xvault.liquid-0.1.7.zip`
+- `dist/skin.xvault.liquid-0.1.8.zip`
 - `dist/addons.xml`
 - `dist/addons.xml.md5`
-- `dist/xvault-repo-upload-0.1.7.zip`
+- `dist/xvault-repo-upload-0.1.8.zip`
+
+Der Build bricht ab, wenn eine lokale Pflichtabhaengigkeit zwar in einer `addon.xml` steht, aber nicht in `dist/addons.xml` oder im Upload-Paket enthalten ist.
 
 ## Entwicklung
 

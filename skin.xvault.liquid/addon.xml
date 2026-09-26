@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="skin.xvault.liquid" version="0.1.7" name="xVAULT Liquid" provider-name="xVAULT">
+<addon id="skin.xvault.liquid" version="0.1.8" name="xVAULT Liquid" provider-name="xVAULT">
 	<requires>
 		<import addon="xbmc.gui" version="5.18.0"/>
+		<import addon="resource.images.weathericons.default"/>
 		<import addon="service.xvault.liquid.promos" version="0.1.7"/>
 	</requires>
 	<extension point="xbmc.gui.skin" debugging="false">
@@ -27,6 +28,6 @@
 			<screenshot>resources/fanart.png</screenshot>
 		</assets>
 		<source>https://www.justwatch.com/de/Serien</source>
-		<news>0.1.7 - Install the promo service as a skin dependency and keep xVAULT video integration optional.</news>
+		<news>0.1.8 - Declare install-time dependencies explicitly and validate repository dependency packaging during release builds.</news>
 	</extension>
 </addon>

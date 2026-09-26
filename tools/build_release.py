@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import re
 import shutil
 import urllib.request
 import zipfile
@@ -15,6 +16,10 @@ REMOTE_ADDONS_XML = DIST / "xvault-remote-addons.xml"
 REMOTE_ADDONS_URL = "http://xvault.ddnss.de/addons.xml"
 UPLOAD_DIR = DIST / "xvault-repo-upload"
 REPO_ID = "repository.xvault"
+EXTERNAL_REPOSITORY_DEPENDENCIES = {
+    # Resolved by Kodi's official repository, not packaged in the xVAULT repo upload.
+    "resource.images.weathericons.default",
+}
 
 
 def safe_rmtree(path: Path, allowed_parent: Path) -> None:
@@ -28,6 +33,39 @@ def safe_rmtree(path: Path, allowed_parent: Path) -> None:
 def addon_info(addon_dir: Path) -> tuple[str, str]:
     root = ET.parse(addon_dir / "addon.xml").getroot()
     return root.attrib["id"], root.attrib["version"]
+
+
+def required_imports(addon_dir: Path) -> list[tuple[str, str]]:
+    root = ET.parse(addon_dir / "addon.xml").getroot()
+    requires = root.find("requires")
+    if requires is None:
+        return []
+
+    imports: list[tuple[str, str]] = []
+    for node in requires.findall("import"):
+        if node.attrib.get("optional", "").lower() == "true":
+            continue
+        addon_id = node.attrib.get("addon", "").strip()
+        if addon_id:
+            imports.append((addon_id, node.attrib.get("version", "").strip()))
+    return imports
+
+
+def is_builtin_dependency(addon_id: str) -> bool:
+    return addon_id.startswith("xbmc.")
+
+
+def version_parts(version: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in re.findall(r"\d+", version or "0"))
+
+
+def version_satisfies(actual: str, required: str) -> bool:
+    if not required:
+        return True
+    actual_parts = version_parts(actual)
+    required_parts = version_parts(required)
+    length = max(len(actual_parts), len(required_parts))
+    return actual_parts + (0,) * (length - len(actual_parts)) >= required_parts + (0,) * (length - len(required_parts))
 
 
 def should_include(addon_id: str, relative_path: Path) -> bool:
@@ -137,6 +175,47 @@ def write_repository_metadata(addon_dirs: list[Path]) -> Path:
     return output
 
 
+def validate_dependency_resolution(addon_dirs: list[Path], metadata_path: Path, zip_paths: list[Path]) -> None:
+    root = ET.parse(metadata_path).getroot()
+    metadata_versions = {
+        node.attrib["id"]: node.attrib.get("version", "")
+        for node in root
+        if node.tag == "addon" and "id" in node.attrib
+    }
+    local_versions = dict(addon_info(addon_dir) for addon_dir in addon_dirs if addon_dir.exists())
+    zipped_ids = {zip_path.name.rsplit("-", 1)[0] for zip_path in zip_paths}
+
+    for addon_id in local_versions:
+        if addon_id not in metadata_versions:
+            raise RuntimeError(f"{metadata_path.name} is missing local add-on {addon_id}")
+        if addon_id not in zipped_ids:
+            raise RuntimeError(f"release upload is missing zip for local add-on {addon_id}")
+
+    for addon_dir in addon_dirs:
+        if not addon_dir.exists():
+            continue
+
+        addon_id, _ = addon_info(addon_dir)
+        for dependency_id, dependency_version in required_imports(addon_dir):
+            if is_builtin_dependency(dependency_id) or dependency_id in EXTERNAL_REPOSITORY_DEPENDENCIES:
+                continue
+
+            actual_version = metadata_versions.get(dependency_id)
+            if actual_version is None:
+                raise RuntimeError(
+                    f"{addon_id} requires {dependency_id}, but it is missing from {metadata_path.name}"
+                )
+            if dependency_id in local_versions and dependency_id not in zipped_ids:
+                raise RuntimeError(
+                    f"{addon_id} requires {dependency_id}, but no {dependency_id} zip is included"
+                )
+            if not version_satisfies(actual_version, dependency_version):
+                raise RuntimeError(
+                    f"{addon_id} requires {dependency_id} >= {dependency_version}, "
+                    f"but {metadata_path.name} contains {actual_version}"
+                )
+
+
 def copy_for_upload(zip_paths: list[Path], metadata_path: Path) -> Path:
     if UPLOAD_DIR.exists():
         safe_rmtree(UPLOAD_DIR, DIST)
@@ -183,6 +262,7 @@ def main() -> None:
         validate_zip(zip_path)
 
     metadata_path = write_repository_metadata(addon_dirs)
+    validate_dependency_resolution(addon_dirs, metadata_path, zip_paths)
     upload_zip = copy_for_upload(zip_paths, metadata_path)
 
     for path in zip_paths + [metadata_path, DIST / "addons.xml.md5", upload_zip]:

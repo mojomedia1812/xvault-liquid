@@ -22,5 +22,5 @@ dist/*
 !dist/addons.xml.md5
 !dist/repository.xvault-1.0.2.zip
 !dist/service.xvault.liquid.promos-0.1.7.zip
-!dist/skin.xvault.liquid-0.1.7.zip
-!dist/xvault-repo-upload-0.1.7.zip
+!dist/skin.xvault.liquid-0.1.8.zip
+!dist/xvault-repo-upload-0.1.8.zip

@@ -1,3 +1,7 @@
+[B]0.1.8[/B]
+• Added explicit install-time dependencies for the promo service and weather icon resources
+• Added release-build validation for local dependency packaging
+
 [B]0.8.5[/B]
 • Updated language files from Transifex
 
