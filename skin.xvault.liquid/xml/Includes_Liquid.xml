@@ -1,0 +1,1059 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<includes>
+    <expression name="liquid_catalogue">[Container.Content(tvshows) | Container.Content(movies) | Container.Content(seasons) | Container.Content(sets)] + !String.Contains(Container.FolderPath,plugin://plugin.video.xvault/?action=episodes&amp;)</expression>
+    <variable name="LiquidSection">
+        <value condition="Window.IsActive(MyFavourites.xml)">$LOCALIZE[31806]</value>
+        <value condition="Window.IsActive(MyMusicNav.xml)">$LOCALIZE[31805]</value>
+        <value condition="Window.IsActive(AddonBrowser.xml) | Window.IsActive(MyPrograms.xml) | Window.IsActive(1100)">$LOCALIZE[31807]</value>
+        <value condition="String.Contains(Container.FolderPath,plugin://plugin.video.xvault/?action=episodes&amp;)">$LOCALIZE[31804]</value>
+        <value condition="String.Contains(Container.FolderPath,plugin://plugin.video.xvault/?action=seasons&amp;)">$LOCALIZE[31803]</value>
+        <value condition="Container.Content(episodes)">$LOCALIZE[31804]</value>
+        <value condition="Container.Content(seasons)">$LOCALIZE[31803]</value>
+        <value condition="Container.Content(tvshows)">$LOCALIZE[31801]</value>
+        <value condition="Container.Content(movies) | Container.Content(sets)">$LOCALIZE[31802]</value>
+        <value condition="!String.IsEmpty(Container.FolderName)">$INFO[Container.FolderName]</value>
+        <value>$LOCALIZE[31800]</value>
+    </variable>
+    <variable name="LiquidItemTitle">
+        <value condition="ListItem.IsParentFolder">$LOCALIZE[31990]</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
+    <variable name="LiquidDetailArt">
+        <value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+        <value>$INFO[ListItem.Icon]</value>
+    </variable>
+    <variable name="LiquidSynopsis">
+        <value condition="ListItem.IsParentFolder">$INFO[Container.FolderName]</value>
+        <value condition="!String.IsEmpty(ListItem.PlotOutline)">$INFO[ListItem.PlotOutline]</value>
+        <value condition="!String.IsEmpty(ListItem.Plot)">$INFO[ListItem.Plot]</value>
+        <value condition="!String.IsEmpty(ListItem.AddonDescription)">$INFO[ListItem.AddonDescription]</value>
+        <value condition="!String.IsEmpty(ListItem.Comment)">$INFO[ListItem.Comment]</value>
+        <value>$INFO[ListItem.Label2]</value>
+    </variable>
+    <variable name="LiquidPlayLabel">
+        <value condition="String.IsEqual(ListItem.DBType,tvshow)">$LOCALIZE[31803]</value>
+        <value condition="String.IsEqual(ListItem.DBType,season)">$LOCALIZE[31804]</value>
+        <value>$VAR[VideoInfoPlayButtonLabelVar]</value>
+    </variable>
+    <variable name="LiquidRowSubtitle">
+        <value condition="!String.IsEmpty(ListItem.Label2)">$INFO[ListItem.Label2]</value>
+        <value condition="!String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist]</value>
+        <value>$INFO[ListItem.Year]  $INFO[ListItem.Duration]</value>
+    </variable>
+    <include name="LiquidMenuButton">
+        <height>62</height>
+        <width>380</width>
+        <font>font12</font>
+        <textoffsetx>20</textoffsetx>
+        <textcolor>ffb8bec3</textcolor>
+        <focusedcolor>ff101416</focusedcolor>
+        <invalidcolor>ff626b70</invalidcolor>
+        <texturefocus colordiffuse="fff2f5f4">textures/white.png</texturefocus>
+        <texturenofocus />
+    </include>
+    <include name="LiquidRailReturn">
+        <param name="return_id">50</param>
+        <definition>
+                <onright condition="Control.IsVisible(50) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">50</onright>
+                <onright condition="Control.IsVisible(51) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">51</onright>
+                <onright condition="Control.IsVisible(52) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">52</onright>
+                <onright condition="Control.IsVisible(53) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">53</onright>
+                <onright condition="Control.IsVisible(54) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">54</onright>
+                <onright condition="Control.IsVisible(55) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">55</onright>
+                <onright condition="Control.IsVisible(500) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">500</onright>
+                <onright condition="Control.IsVisible(501) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">501</onright>
+                <onright condition="Control.IsVisible(502) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">502</onright>
+                <onright condition="Control.IsVisible(503) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">503</onright>
+                <onright condition="Control.IsVisible(504) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">504</onright>
+                <onright condition="![[String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)] + [Control.IsVisible(50) | Control.IsVisible(51) | Control.IsVisible(52) | Control.IsVisible(53) | Control.IsVisible(54) | Control.IsVisible(55) | Control.IsVisible(500) | Control.IsVisible(501) | Control.IsVisible(502) | Control.IsVisible(503) | Control.IsVisible(504)]]">$PARAM[return_id]</onright>
+        </definition>
+    </include>
+    <include name="LiquidNavigationRail">
+        <param name="return_id">50</param>
+        <definition>
+            <control type="group">
+                <depth>DepthMax</depth>
+            <control type="image">
+                <width>92</width>
+                <height>100%</height>
+                <texture colordiffuse="ff101315">textures/white.png</texture>
+            </control>
+            <control type="image">
+                <left>91</left>
+                <width>1</width>
+                <height>100%</height>
+                <texture colordiffuse="18ffffff">textures/white.png</texture>
+            </control>
+            <control type="label">
+                <left>18</left>
+                <top>36</top>
+                <width>64</width>
+                <height>40</height>
+                <font>font32_title</font>
+                <label>xV</label>
+                <textcolor>ffedf4f0</textcolor>
+                <align>center</align>
+            </control>
+            <control type="grouplist" id="9300">
+                <left>16</left>
+                <top>172</top>
+                <width>60</width>
+                <height>560</height>
+                <orientation>vertical</orientation>
+                <itemgap>18</itemgap>
+                <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
+                <onleft>9300</onleft>
+                <onup>9300</onup>
+                <ondown>9300</ondown>
+                <control type="group">
+                    <width>60</width>
+                    <height>60</height>
+                    <control type="button" id="9301">
+                    <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
+                        <width>60</width>
+                        <height>60</height>
+                        <label />
+                        <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
+                        <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
+                        <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
+                        <onclick>ActivateWindow(Home)</onclick>
+                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturenofocus />
+                    </control>
+                    <control type="image">
+                        <left>18</left>
+                        <top>18</top>
+                        <width>24</width>
+                        <height>24</height>
+                        <texture>icons/tv.png</texture>
+                        <aspectratio>keep</aspectratio>
+                    </control>
+                </control>
+                <control type="group">
+                    <width>60</width>
+                    <height>60</height>
+                    <control type="button" id="9302">
+                    <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
+                        <width>60</width>
+                        <height>60</height>
+                        <label />
+                        <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
+                        <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
+                        <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
+                        <onclick>ActivateWindow(Videos,root,return)</onclick>
+                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturenofocus />
+                    </control>
+                    <control type="image">
+                        <left>18</left>
+                        <top>18</top>
+                        <width>24</width>
+                        <height>24</height>
+                        <texture>icons/movies.png</texture>
+                        <aspectratio>keep</aspectratio>
+                    </control>
+                </control>
+                <control type="group">
+                    <width>60</width>
+                    <height>60</height>
+                    <control type="button" id="9303">
+                    <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
+                        <width>60</width>
+                        <height>60</height>
+                        <label />
+                        <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
+                        <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
+                        <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
+                        <onclick>ActivateWindow(Music,root,return)</onclick>
+                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturenofocus />
+                    </control>
+                    <control type="image">
+                        <left>18</left>
+                        <top>18</top>
+                        <width>24</width>
+                        <height>24</height>
+                        <texture>icons/music.png</texture>
+                        <aspectratio>keep</aspectratio>
+                    </control>
+                </control>
+                <control type="group">
+                    <width>60</width>
+                    <height>60</height>
+                    <control type="button" id="9304">
+                    <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
+                        <width>60</width>
+                        <height>60</height>
+                        <label />
+                        <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
+                        <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
+                        <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
+                        <onclick>ActivateWindow(favouritesbrowser)</onclick>
+                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturenofocus />
+                    </control>
+                    <control type="image">
+                        <left>18</left>
+                        <top>18</top>
+                        <width>24</width>
+                        <height>24</height>
+                        <texture>icons/star.png</texture>
+                        <aspectratio>keep</aspectratio>
+                    </control>
+                </control>
+                <control type="group">
+                    <width>60</width>
+                    <height>60</height>
+                    <control type="button" id="9305">
+                    <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
+                        <width>60</width>
+                        <height>60</height>
+                        <label />
+                        <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
+                        <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
+                        <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
+                        <onclick>ActivateWindow(1100)</onclick>
+                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturenofocus />
+                    </control>
+                    <control type="image">
+                        <left>18</left>
+                        <top>18</top>
+                        <width>24</width>
+                        <height>24</height>
+                        <texture>icons/addons.png</texture>
+                        <aspectratio>keep</aspectratio>
+                    </control>
+                </control>
+                <control type="group">
+                    <width>60</width>
+                    <height>60</height>
+                    <control type="button" id="9306">
+                    <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
+                        <width>60</width>
+                        <height>60</height>
+                        <label />
+                        <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
+                        <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
+                        <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
+                        <onclick>ActivateWindow(1107)</onclick>
+                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturenofocus />
+                    </control>
+                    <control type="image">
+                        <left>18</left>
+                        <top>18</top>
+                        <width>24</width>
+                        <height>24</height>
+                        <texture>icons/search.png</texture>
+                        <aspectratio>keep</aspectratio>
+                    </control>
+                </control>
+                <control type="group">
+                    <width>60</width>
+                    <height>60</height>
+                    <control type="button" id="9307">
+                    <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
+                        <width>60</width>
+                        <height>60</height>
+                        <label />
+                        <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
+                        <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
+                        <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
+                        <onclick>ActivateWindow(settings)</onclick>
+                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturenofocus />
+                    </control>
+                    <control type="image">
+                        <left>18</left>
+                        <top>18</top>
+                        <width>24</width>
+                        <height>24</height>
+                        <texture>icons/settings.png</texture>
+                        <aspectratio>keep</aspectratio>
+                    </control>
+                </control>
+            </control>
+            <control type="image">
+                <left>104</left>
+                <top>120</top>
+                <width>316</width>
+                <height>48</height>
+                <texture colordiffuse="ff171c1f">textures/white.png</texture>
+                <visible>ControlGroup(9300).HasFocus</visible>
+            </control>
+            <control type="label">
+                <left>120</left>
+                <top>126</top>
+                <width>284</width>
+                <height>30</height>
+                <font>font20_title</font>
+                <label>$LOCALIZE[10000]</label>
+                <textcolor>fff1f5f3</textcolor>
+                <visible>Control.HasFocus(9301)</visible>
+            </control>
+            <control type="label">
+                <left>120</left>
+                <top>126</top>
+                <width>284</width>
+                <height>30</height>
+                <font>font20_title</font>
+                <label>$LOCALIZE[31800]</label>
+                <textcolor>fff1f5f3</textcolor>
+                <visible>Control.HasFocus(9302)</visible>
+            </control>
+            <control type="label">
+                <left>120</left>
+                <top>126</top>
+                <width>284</width>
+                <height>30</height>
+                <font>font20_title</font>
+                <label>$LOCALIZE[31805]</label>
+                <textcolor>fff1f5f3</textcolor>
+                <visible>Control.HasFocus(9303)</visible>
+            </control>
+            <control type="label">
+                <left>120</left>
+                <top>126</top>
+                <width>284</width>
+                <height>30</height>
+                <font>font20_title</font>
+                <label>$LOCALIZE[31806]</label>
+                <textcolor>fff1f5f3</textcolor>
+                <visible>Control.HasFocus(9304)</visible>
+            </control>
+            <control type="label">
+                <left>120</left>
+                <top>126</top>
+                <width>284</width>
+                <height>30</height>
+                <font>font20_title</font>
+                <label>$LOCALIZE[31807]</label>
+                <textcolor>fff1f5f3</textcolor>
+                <visible>Control.HasFocus(9305)</visible>
+            </control>
+            <control type="label">
+                <left>120</left>
+                <top>126</top>
+                <width>284</width>
+                <height>30</height>
+                <font>font20_title</font>
+                <label>$LOCALIZE[31810]</label>
+                <textcolor>fff1f5f3</textcolor>
+                <visible>Control.HasFocus(9306)</visible>
+            </control>
+            <control type="label">
+                <left>120</left>
+                <top>126</top>
+                <width>284</width>
+                <height>30</height>
+                <font>font20_title</font>
+                <label>$LOCALIZE[10004]</label>
+                <textcolor>fff1f5f3</textcolor>
+                <visible>Control.HasFocus(9307)</visible>
+            </control>
+            </control>
+        </definition>
+    </include>
+    <include name="LiquidSurface">
+        <control type="image">
+            <width>100%</width>
+            <height>100%</height>
+            <texture colordiffuse="ff101214">textures/white.png</texture>
+        </control>
+        <control type="image">
+            <left>92</left>
+            <right>0</right>
+            <height>100%</height>
+            <texture colordiffuse="38ffffff">promos/00-liquid-wall.png</texture>
+            <aspectratio>scale</aspectratio>
+            <visible>String.IsEmpty(ListItem.Art(fanart)) + !Skin.HasSetting(liquid_focus_mode)</visible>
+        </control>
+        <control type="image">
+            <left>92</left>
+            <right>0</right>
+            <height>100%</height>
+            <texture background="true">$INFO[ListItem.Art(fanart)]</texture>
+            <aspectratio align="right" aligny="top">scale</aspectratio>
+            <fadetime>320</fadetime>
+            <visible>!Skin.HasSetting(liquid_focus_mode)</visible>
+        </control>
+        <control type="image">
+            <left>92</left>
+            <width>82%</width>
+            <height>100%</height>
+            <texture>textures/gradient-left.png</texture>
+        </control>
+        <control type="image">
+            <left>92</left>
+            <width>100%</width>
+            <height>100%</height>
+            <texture>textures/gradient-bottom.png</texture>
+        </control>
+        <control type="image">
+            <left>92</left>
+            <width>100%</width>
+            <height>100%</height>
+            <texture colordiffuse="22000000">textures/white.png</texture>
+        </control>
+        <include>LiquidNavigationRail</include>
+        <control type="label">
+            <left>156</left>
+            <top>42</top>
+            <width>270</width>
+            <height>40</height>
+            <font>font25_title</font>
+            <label>xVAULT</label>
+            <textcolor>ffe9edef</textcolor>
+        </control>
+        <control type="label">
+            <left>156</left>
+            <top>84</top>
+            <width>580</width>
+            <height>30</height>
+            <font>font10</font>
+            <label>$VAR[LiquidSection]</label>
+            <textcolor>ff9ba8af</textcolor>
+        </control>
+        <control type="label">
+            <right>304</right>
+            <top>48</top>
+            <width>200</width>
+            <height>30</height>
+            <font>font10</font>
+            <label>$INFO[System.Time]</label>
+            <textcolor>ff89979e</textcolor>
+            <align>right</align>
+        </control>
+        <control type="button" id="9201">
+            <right>220</right>
+            <top>40</top>
+            <width>48</width>
+            <height>48</height>
+            <label />
+            <texturefocus colordiffuse="28ffffff">textures/white.png</texturefocus>
+            <texturenofocus />
+            <onclick>Action(Back)</onclick>
+            <onleft>9300</onleft>
+            <onright>9202</onright>
+            <ondown condition="Control.IsVisible(51)">51</ondown>
+            <ondown condition="!Control.IsVisible(51)">50</ondown>
+        </control>
+        <control type="image">
+            <right>232</right>
+            <top>52</top>
+            <width>24</width>
+            <height>24</height>
+            <texture>icons/back.png</texture>
+            <aspectratio>keep</aspectratio>
+        </control>
+        <control type="button" id="9202">
+            <right>148</right>
+            <top>40</top>
+            <width>48</width>
+            <height>48</height>
+            <label />
+            <texturefocus colordiffuse="28ffffff">textures/white.png</texturefocus>
+            <texturenofocus />
+            <onclick>ActivateWindow(1107)</onclick>
+            <onleft>9201</onleft>
+            <onright>9203</onright>
+            <ondown condition="Control.IsVisible(51)">51</ondown>
+            <ondown condition="!Control.IsVisible(51)">50</ondown>
+        </control>
+        <control type="image">
+            <right>160</right>
+            <top>52</top>
+            <width>24</width>
+            <height>24</height>
+            <texture>icons/search.png</texture>
+            <aspectratio>keep</aspectratio>
+        </control>
+        <control type="button" id="9203">
+            <right>76</right>
+            <top>40</top>
+            <width>48</width>
+            <height>48</height>
+            <label />
+            <texturefocus colordiffuse="28ffffff">textures/white.png</texturefocus>
+            <texturenofocus />
+            <onclick>SetFocus(9000)</onclick>
+            <onleft>9202</onleft>
+            <onright>9300</onright>
+            <ondown>9000</ondown>
+        </control>
+        <control type="image">
+            <right>88</right>
+            <top>52</top>
+            <width>24</width>
+            <height>24</height>
+            <texture>icons/settings.png</texture>
+            <aspectratio>keep</aspectratio>
+        </control>
+        <control type="label">
+            <right>76</right>
+            <top>104</top>
+            <width>380</width>
+            <height>28</height>
+            <font>font10</font>
+            <label>$LOCALIZE[31815]</label>
+            <textcolor>ffccd5d9</textcolor>
+            <align>right</align>
+            <visible>Control.HasFocus(9203)</visible>
+        </control>
+        <control type="label">
+            <right>76</right>
+            <top>104</top>
+            <width>380</width>
+            <height>28</height>
+            <font>font10</font>
+            <label>$LOCALIZE[31810]</label>
+            <textcolor>ffccd5d9</textcolor>
+            <align>right</align>
+            <visible>Control.HasFocus(9202)</visible>
+        </control>
+        <control type="label">
+            <right>76</right>
+            <top>104</top>
+            <width>380</width>
+            <height>28</height>
+            <font>font10</font>
+            <label>$LOCALIZE[31990]</label>
+            <textcolor>ffccd5d9</textcolor>
+            <align>right</align>
+            <visible>Control.HasFocus(9201)</visible>
+        </control>
+        <control type="image">
+            <left>156</left>
+            <right>76</right>
+            <bottom>86</bottom>
+            <height>1</height>
+            <texture colordiffuse="18ffffff">textures/white.png</texture>
+        </control>
+        <control type="label">
+            <left>156</left>
+            <bottom>35</bottom>
+            <width>48%</width>
+            <height>30</height>
+            <font>font_flag</font>
+            <label>$INFO[Container.CurrentItem] / $INFO[Container.NumItems]  $VAR[LiquidSection]</label>
+            <textcolor>ff88969e</textcolor>
+            <visible>!Window.IsActive(1100)</visible>
+        </control>
+        <control type="label">
+            <right>76</right>
+            <bottom>35</bottom>
+            <width>40%</width>
+            <height>30</height>
+            <font>font_flag</font>
+            <label>$INFO[MusicPlayer.Artist]  $INFO[Player.Title]</label>
+            <textcolor>ffa8bcb5</textcolor>
+            <align>right</align>
+            <visible>Player.HasMedia</visible>
+        </control>
+    </include>
+    <include name="LiquidParentCardArt">
+        <control type="image">
+            <left>76</left>
+            <top>130</top>
+            <width>80</width>
+            <height>80</height>
+            <texture colordiffuse="ffb0c3bb">icons/back.png</texture>
+            <aspectratio>keep</aspectratio>
+            <visible>ListItem.IsParentFolder</visible>
+        </control>
+    </include>
+    <include name="LiquidCatalogue">
+        <control type="group">
+            <visible>Control.IsVisible(51)</visible>
+            <control type="label">
+                <left>156</left>
+                <top>166</top>
+                <width>53%</width>
+                <height>94</height>
+                <font>font52_title</font>
+                <label>$VAR[LiquidItemTitle]</label>
+                <textcolor>fff5f6f5</textcolor>
+                <scroll>true</scroll>
+            </control>
+            <control type="label">
+                <left>156</left>
+                <top>280</top>
+                <width>49%</width>
+                <height>34</height>
+                <font>font10</font>
+                <label>$INFO[ListItem.Year]  $INFO[ListItem.Genre]  $INFO[ListItem.Duration, / ,]</label>
+                <textcolor>ffa9b4b9</textcolor>
+            </control>
+            <control type="textbox">
+                <left>156</left>
+                <top>338</top>
+                <width>44%</width>
+                <height>190</height>
+                <font>font12</font>
+                <label>$VAR[LiquidSynopsis]</label>
+                <textcolor>ffb8bec3</textcolor>
+            </control>
+        </control>
+        <control type="list" id="51">
+            <left>144</left>
+            <top>52%</top>
+            <right>64</right>
+            <height>410</height>
+            <visible>$EXP[liquid_catalogue]</visible>
+            <orientation>horizontal</orientation>
+            <viewtype label="20021">icon</viewtype>
+            <scrolltime tween="cubic" easing="out">220</scrolltime>
+            <preloaditems>2</preloaditems>
+            <onleft>9300</onleft>
+            <onright>51</onright>
+            <onup>9201</onup>
+            <ondown>9000</ondown>
+            <itemlayout width="236" height="410">
+                <control type="image">
+                    <left>10</left>
+                    <top>10</top>
+                    <width>212</width>
+                    <height>318</height>
+                    <texture colordiffuse="ff171b1e">textures/white.png</texture>
+                </control>
+                <control type="image">
+                    <left>10</left>
+                    <top>10</top>
+                    <width>212</width>
+                    <height>318</height>
+                    <texture background="true" fallback="DefaultVideo.png">$VAR[PosterThumbVar]</texture>
+                    <aspectratio>scale</aspectratio>
+                    <visible>!ListItem.IsParentFolder</visible>
+                </control>
+                <include>LiquidParentCardArt</include>
+                <control type="label">
+                    <left>10</left>
+                    <top>344</top>
+                    <width>212</width>
+                    <height>30</height>
+                    <font>font10</font>
+                    <label>$VAR[LiquidItemTitle]</label>
+                    <textcolor>ffb9c0c4</textcolor>
+                </control>
+                <control type="label">
+                    <left>10</left>
+                    <top>377</top>
+                    <width>212</width>
+                    <height>24</height>
+                    <font>font_flag</font>
+                    <label>$INFO[ListItem.Year]</label>
+                    <textcolor>ff869197</textcolor>
+                </control>
+                <control type="progress">
+                    <left>10</left>
+                    <top>324</top>
+                    <width>212</width>
+                    <height>4</height>
+                    <info>ListItem.PercentPlayed</info>
+                    <texturebg colordiffuse="55454c50">textures/white.png</texturebg>
+                    <lefttexture />
+                    <midtexture colordiffuse="ff9be3c0">textures/white.png</midtexture>
+                    <righttexture />
+                    <overlaytexture />
+                    <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                </control>
+                <control type="image">
+                    <left>166</left>
+                    <top>20</top>
+                    <width>46</width>
+                    <height>28</height>
+                    <texture colordiffuse="df101416">textures/white.png</texture>
+                    <visible>!String.IsEmpty(ListItem.Rating) + !ListItem.IsParentFolder</visible>
+                </control>
+                <control type="label">
+                    <left>166</left>
+                    <top>20</top>
+                    <width>46</width>
+                    <height>28</height>
+                    <font>font_flag</font>
+                    <label>$INFO[ListItem.Rating]</label>
+                    <textcolor>ffffffff</textcolor>
+                    <align>center</align>
+                    <visible>!String.IsEmpty(ListItem.Rating) + !ListItem.IsParentFolder</visible>
+                </control>
+                <control type="label">
+                    <left>10</left>
+                    <top>295</top>
+                    <width>180</width>
+                    <height>28</height>
+                    <font>font_flag</font>
+                    <label>$LOCALIZE[31812]</label>
+                    <textcolor>ffb9f2d7</textcolor>
+                    <visible>Integer.IsGreater(ListItem.Playcount,0)</visible>
+                </control>
+            </itemlayout>
+            <focusedlayout width="236" height="410">
+                <control type="image">
+                    <left>10</left>
+                    <top>10</top>
+                    <width>212</width>
+                    <height>318</height>
+                    <texture colordiffuse="ff171b1e">textures/white.png</texture>
+                </control>
+                <control type="image">
+                    <left>10</left>
+                    <top>10</top>
+                    <width>212</width>
+                    <height>318</height>
+                    <texture background="true" fallback="DefaultVideo.png">$VAR[PosterThumbVar]</texture>
+                    <aspectratio>scale</aspectratio>
+                    <visible>!ListItem.IsParentFolder</visible>
+                </control>
+                <include>LiquidParentCardArt</include>
+                <control type="image">
+                    <left>6</left>
+                    <top>6</top>
+                    <width>220</width>
+                    <height>326</height>
+                    <texture border="2" infill="false" colordiffuse="fff1f5f3">textures/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>10</left>
+                    <top>344</top>
+                    <width>212</width>
+                    <height>30</height>
+                    <font>font20_title</font>
+                    <label>$VAR[LiquidItemTitle]</label>
+                    <textcolor>ffffffff</textcolor>
+                    <scroll>true</scroll>
+                </control>
+                <control type="label">
+                    <left>10</left>
+                    <top>377</top>
+                    <width>212</width>
+                    <height>24</height>
+                    <font>font_flag</font>
+                    <label>$INFO[ListItem.Year]</label>
+                    <textcolor>ff869197</textcolor>
+                </control>
+                <control type="progress">
+                    <left>10</left>
+                    <top>324</top>
+                    <width>212</width>
+                    <height>4</height>
+                    <info>ListItem.PercentPlayed</info>
+                    <texturebg colordiffuse="55454c50">textures/white.png</texturebg>
+                    <lefttexture />
+                    <midtexture colordiffuse="ff9be3c0">textures/white.png</midtexture>
+                    <righttexture />
+                    <overlaytexture />
+                    <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                </control>
+                <control type="image">
+                    <left>166</left>
+                    <top>20</top>
+                    <width>46</width>
+                    <height>28</height>
+                    <texture colordiffuse="df101416">textures/white.png</texture>
+                    <visible>!String.IsEmpty(ListItem.Rating) + !ListItem.IsParentFolder</visible>
+                </control>
+                <control type="label">
+                    <left>166</left>
+                    <top>20</top>
+                    <width>46</width>
+                    <height>28</height>
+                    <font>font_flag</font>
+                    <label>$INFO[ListItem.Rating]</label>
+                    <textcolor>ffffffff</textcolor>
+                    <align>center</align>
+                    <visible>!String.IsEmpty(ListItem.Rating) + !ListItem.IsParentFolder</visible>
+                </control>
+                <control type="label">
+                    <left>10</left>
+                    <top>295</top>
+                    <width>180</width>
+                    <height>28</height>
+                    <font>font_flag</font>
+                    <label>$LOCALIZE[31812]</label>
+                    <textcolor>ffb9f2d7</textcolor>
+                    <visible>Integer.IsGreater(ListItem.Playcount,0)</visible>
+                </control>
+            </focusedlayout>
+        </control>
+    </include>
+    <include name="LiquidMasterDetail">
+        <control type="group">
+            <visible>Control.IsVisible(50)</visible>
+            <control type="image">
+                <left>156</left>
+                <top>174</top>
+                <width>42%</width>
+                <height>390</height>
+                <texture background="true" fallback="DefaultVideo.png">$VAR[LiquidDetailArt]</texture>
+                <aspectratio align="left">keep</aspectratio>
+                <fadetime>200</fadetime>
+                <visible>!ListItem.IsParentFolder</visible>
+            </control>
+            <control type="image">
+                <left>156</left>
+                <top>304</top>
+                <width>96</width>
+                <height>96</height>
+                <texture colordiffuse="ffb0c3bb">icons/back.png</texture>
+                <aspectratio>keep</aspectratio>
+                <visible>ListItem.IsParentFolder</visible>
+            </control>
+            <control type="label">
+                <left>156</left>
+                <top>594</top>
+                <width>43%</width>
+                <height>74</height>
+                <font>font36_title</font>
+                <label>$VAR[LiquidItemTitle]</label>
+                <textcolor>fff2f5f4</textcolor>
+                <scroll>true</scroll>
+            </control>
+            <control type="label">
+                <left>156</left>
+                <top>682</top>
+                <width>43%</width>
+                <height>34</height>
+                <font>font10</font>
+                <label>$INFO[ListItem.Year]  $INFO[ListItem.Genre]  $INFO[ListItem.Duration, / ,]</label>
+                <textcolor>ff9ca9af</textcolor>
+            </control>
+            <control type="textbox">
+                <left>156</left>
+                <top>738</top>
+                <width>43%</width>
+                <height>130</height>
+                <font>font12</font>
+                <label>$VAR[LiquidSynopsis]</label>
+                <textcolor>ffb8bec3</textcolor>
+            </control>
+            <control type="label">
+                <left>156</left>
+                <top>893</top>
+                <width>43%</width>
+                <height>28</height>
+                <font>font_flag</font>
+                <label>$LOCALIZE[31809]  $INFO[ListItem.PercentPlayed]%</label>
+                <textcolor>ff9be3c0</textcolor>
+                <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+            </control>
+        </control>
+        <control type="list" id="50">
+            <right>76</right>
+            <top>174</top>
+            <width>740</width>
+            <height>704</height>
+            <viewtype label="535">list</viewtype>
+            <pagecontrol>5199</pagecontrol>
+            <scrolltime>180</scrolltime>
+            <onleft>9300</onleft>
+            <onright>5199</onright>
+            <onup>9201</onup>
+            <ondown>9000</ondown>
+            <itemlayout width="740" height="88">
+                <control type="image">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>740</width>
+                    <height>80</height>
+                    <texture colordiffuse="0bffffff">textures/white.png</texture>
+                </control>
+                <control type="image">
+                    <left>20</left>
+                    <top>16</top>
+                    <width>48</width>
+                    <height>48</height>
+                    <texture background="true" fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+                    <aspectratio>keep</aspectratio>
+                </control>
+                <control type="label">
+                    <left>88</left>
+                    <top>12</top>
+                    <width>600</width>
+                    <height>31</height>
+                    <font>font12</font>
+                    <label>$VAR[LiquidItemTitle]</label>
+                    <textcolor>ffe1e6e8</textcolor>
+                </control>
+                <control type="label">
+                    <left>88</left>
+                    <top>47</top>
+                    <width>588</width>
+                    <height>25</height>
+                    <font>font_flag</font>
+                    <label>$VAR[LiquidRowSubtitle]</label>
+                    <textcolor>ff89969e</textcolor>
+                </control>
+                <control type="progress">
+                    <left>88</left>
+                    <top>74</top>
+                    <width>600</width>
+                    <height>3</height>
+                    <info>ListItem.PercentPlayed</info>
+                    <texturebg colordiffuse="55454c50">textures/white.png</texturebg>
+                    <lefttexture />
+                    <midtexture colordiffuse="ff9be3c0">textures/white.png</midtexture>
+                    <righttexture />
+                    <overlaytexture />
+                    <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                </control>
+            </itemlayout>
+            <focusedlayout width="740" height="88">
+                <control type="image">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>740</width>
+                    <height>80</height>
+                    <texture colordiffuse="fff0f4f2">textures/white.png</texture>
+                </control>
+                <control type="image">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>3</width>
+                    <height>80</height>
+                    <texture colordiffuse="ff9be3c0">textures/white.png</texture>
+                </control>
+                <control type="image">
+                    <left>20</left>
+                    <top>16</top>
+                    <width>48</width>
+                    <height>48</height>
+                    <texture background="true" fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+                    <aspectratio>keep</aspectratio>
+                </control>
+                <control type="label">
+                    <left>88</left>
+                    <top>12</top>
+                    <width>600</width>
+                    <height>31</height>
+                    <font>font25_title</font>
+                    <label>$VAR[LiquidItemTitle]</label>
+                    <textcolor>ff101416</textcolor>
+                    <scroll>true</scroll>
+                </control>
+                <control type="label">
+                    <left>88</left>
+                    <top>47</top>
+                    <width>588</width>
+                    <height>25</height>
+                    <font>font_flag</font>
+                    <label>$VAR[LiquidRowSubtitle]</label>
+                    <textcolor>ff53605e</textcolor>
+                </control>
+                <control type="progress">
+                    <left>88</left>
+                    <top>74</top>
+                    <width>600</width>
+                    <height>3</height>
+                    <info>ListItem.PercentPlayed</info>
+                    <texturebg colordiffuse="55454c50">textures/white.png</texturebg>
+                    <lefttexture />
+                    <midtexture colordiffuse="ff9be3c0">textures/white.png</midtexture>
+                    <righttexture />
+                    <overlaytexture />
+                    <visible>Integer.IsGreater(ListItem.PercentPlayed,0)</visible>
+                </control>
+            </focusedlayout>
+        </control>
+        <control type="scrollbar" id="5199">
+            <right>54</right>
+            <top>174</top>
+            <width>3</width>
+            <height>704</height>
+            <orientation>vertical</orientation>
+            <onleft>50</onleft>
+            <onright>9000</onright>
+            <texturesliderbackground colordiffuse="22ffffff">textures/white.png</texturesliderbackground>
+            <texturesliderbar colordiffuse="889eafb7">textures/white.png</texturesliderbar>
+            <texturesliderbarfocus colordiffuse="ffbce3d2">textures/white.png</texturesliderbarfocus>
+            <showonepage>false</showonepage>
+            <visible>Control.IsVisible(50)</visible>
+        </control>
+        <control type="label">
+            <left>156</left>
+            <top>174</top>
+            <width>75%</width>
+            <height>80</height>
+            <font>font36_title</font>
+            <label>$LOCALIZE[31814]</label>
+            <textcolor>ffb8c3c8</textcolor>
+            <visible>Integer.IsEqual(Container.NumItems,0)</visible>
+        </control>
+    </include>
+    <include name="LiquidOptionsFrame">
+        <control type="group">
+            <visible>ControlGroup(9000).HasFocus</visible>
+            <control type="image">
+                <right>54</right>
+                <top>124</top>
+                <width>424</width>
+                <height>750</height>
+                <texture colordiffuse="ff171d20">textures/white.png</texture>
+            </control>
+            <control type="image">
+                <right>54</right>
+                <top>124</top>
+                <width>424</width>
+                <height>2</height>
+                <texture colordiffuse="ff9be3c0">textures/white.png</texture>
+            </control>
+            <control type="label">
+                <right>76</right>
+                <top>146</top>
+                <width>380</width>
+                <height>34</height>
+                <font>font20_title</font>
+                <label>$LOCALIZE[31815]</label>
+                <textcolor>ffe9edef</textcolor>
+            </control>
+        </control>
+    </include>
+    <include name="LiquidCommonOptions">
+        <control type="button" id="2">
+            <include>LiquidMenuButton</include>
+            <label>$LOCALIZE[100]</label>
+        </control>
+        <control type="button" id="3">
+            <include>LiquidMenuButton</include>
+            <label>$LOCALIZE[550]</label>
+        </control>
+        <control type="togglebutton" id="4">
+            <include>LiquidMenuButton</include>
+            <label>$LOCALIZE[584]</label>
+            <altlabel>$LOCALIZE[585]</altlabel>
+            <usealttexture>Container.SortDirection(descending)</usealttexture>
+            <alttexturefocus colordiffuse="fff2f5f4">textures/white.png</alttexturefocus>
+            <alttexturenofocus />
+        </control>
+        <control type="button" id="9401">
+            <include>LiquidMenuButton</include>
+            <label>$LOCALIZE[31813]</label>
+            <onclick>Skin.ToggleSetting(liquid_focus_mode)</onclick>
+        </control>
+        <control type="button" id="9402">
+            <include>LiquidMenuButton</include>
+            <label>$LOCALIZE[31811]</label>
+            <onclick>SetProperty(fanart,$ESCINFO[ListItem.Art(fanart)],home)</onclick>
+            <onclick>ActivateWindow(1104)</onclick>
+            <visible>!String.IsEmpty(ListItem.Art(fanart))</visible>
+        </control>
+        <control type="button" id="9403">
+            <include>LiquidMenuButton</include>
+            <label>$LOCALIZE[33063]</label>
+            <onclick>SetFocus(50)</onclick>
+            <onclick condition="Control.IsVisible(51)">SetFocus(51)</onclick>
+            <onclick>Action(ContextMenu)</onclick>
+        </control>
+    </include>
+    <include name="LiquidOptionsNavigation">
+        <onleft condition="Control.IsVisible(51)">51</onleft>
+        <onleft condition="!Control.IsVisible(51)">50</onleft>
+        <onback condition="Control.IsVisible(51)">51</onback>
+        <onback condition="!Control.IsVisible(51)">50</onback>
+        <onright>9203</onright>
+        <onup>9203</onup>
+        <ondown>9000</ondown>
+    </include>
+</includes>

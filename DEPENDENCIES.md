@@ -3,11 +3,11 @@
 ## Required
 
 - Kodi with `xbmc.gui` 5.18.0 or compatible.
-- `resource.images.weathericons.default`, resolved through Kodi's official repository.
+- `resource.images.weathericons.default` >= 1.0.0, shipped with standard Kodi installations and available through Kodi's official repository.
 - Kodi Python runtime `xbmc.python` 3.0.0.
-- `service.xvault.liquid.promos` 0.1.7.
+The skin ZIP embeds the promo code from `service.xvault.liquid.promos/service.py` and starts it through its own `xbmc.service` extension. Direct ZIP installation does not require the xVAULT repository or a separately installed companion add-on. Kodi resolves the declared Python, GUI and weather-icon requirements using its installed components or official repository. It cannot discover arbitrary dependency ZIPs next to the selected ZIP.
 
-The skin declares `service.xvault.liquid.promos` and `resource.images.weathericons.default` as required add-ons. Kodi can install them automatically when the xVAULT repository and the official Kodi repository are enabled.
+The separate companion remains available for existing installations. If it is enabled, the embedded launcher delegates rotation to it; Spotlight actions always use the bundled code. Optional add-ons are not required for ZIP installation.
 
 ## Optional
 
@@ -20,4 +20,4 @@ Optional add-ons are not forced during skin installation; the skin exposes insta
 
 ## Runtime Data
 
-Promo images and series metadata are fetched at runtime and stored locally inside the skin media cache. These downloaded images are not bundled into release ZIPs or committed to the project.
+Promo images and metadata are stored in `special://profile/addon_data/skin.xvault.liquid/promos`, outside the replaceable add-on folder, with movies isolated in `movies/`. Failed downloads keep the last working cache. Fallback artwork remains inside the skin. Downloads are not bundled into release ZIPs or committed. Existing companion installations should also be updated to 0.2.0 for focus-aware movie and series rotation.

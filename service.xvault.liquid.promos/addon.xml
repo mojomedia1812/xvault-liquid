@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="service.xvault.liquid.promos" version="0.1.7" name="xVAULT Liquid Promos" provider-name="xVAULT">
+<addon id="service.xvault.liquid.promos" version="0.2.0" name="xVAULT Liquid Promos" provider-name="xVAULT">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
 	</requires>
@@ -8,10 +8,10 @@
 	<extension point="xbmc.addon.metadata">
 		<platform>all</platform>
 		<license>GPL-2.0-or-later, CC BY-SA 4.0</license>
-		<summary lang="en_GB">Refreshes current TV promo backgrounds for xVAULT Liquid.</summary>
-		<summary lang="de_DE">Aktualisiert aktuelle Serien-Promo-Hintergruende fuer xVAULT Liquid.</summary>
-		<description lang="en_GB">Downloads current German series backdrop images and metadata from JustWatch into the xVAULT Liquid skin promo folder.</description>
-		<description lang="de_DE">Laedt aktuelle deutsche Serien-Backdrops und Metadaten von JustWatch in den Promo-Ordner des xVAULT-Liquid-Skins.</description>
+		<summary lang="en_GB">Focus-aware movie and TV spotlight for xVAULT Liquid.</summary>
+		<summary lang="de_DE">Film- und Serien-Spotlight passend zum Dock-Fokus von xVAULT Liquid.</summary>
+		<description lang="en_GB">Caches German movie and series artwork from JustWatch in profile data and switches the home spotlight when the dock selection changes.</description>
+		<description lang="de_DE">Speichert deutsche Film- und Serienbilder von JustWatch im Profil und wechselt das Spotlight beim Hervorheben von Filmen oder Serien im Dock.</description>
 		<assets>
 			<icon>icon.png</icon>
 		</assets>

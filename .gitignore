@@ -15,12 +15,13 @@ skin.xvault.liquid/media/promos/.xvault-promos-updated
 skin.xvault.liquid/media/promos/live-*.jpg
 skin.xvault.liquid/media/promos/*-promos.json
 skin.xvault.liquid/media/promos/source-*.txt
+skin.xvault.liquid/media/promos/movies/
 
 # Release output: keep only current installable artifacts
 dist/*
 !dist/addons.xml
 !dist/addons.xml.md5
 !dist/repository.xvault-1.0.2.zip
-!dist/service.xvault.liquid.promos-0.1.7.zip
-!dist/skin.xvault.liquid-0.1.8.zip
-!dist/xvault-repo-upload-0.1.8.zip
+!dist/service.xvault.liquid.promos-0.2.0.zip
+!dist/skin.xvault.liquid-0.2.0.zip
+!dist/xvault-repo-upload-0.2.0.zip

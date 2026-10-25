@@ -1,3 +1,18 @@
+[B]0.2.0[/B]
+- Keep the shared navigation rail visible across home, settings, file, media and TV menus
+- Switch home spotlight between movies and series on dock focus, with independent positions
+- Refresh both artwork caches in the background without blocking dock navigation
+- Unified Liquid navigation for video, music, favourites, programs and add-on browsing
+- Added poster shelves with ratings, watched indicators and playback progress
+- Added master-detail lists, focus mode and an accessible view-options drawer
+- Redesigned video details with native cast, season browsing and full-screen artwork
+- Added contextual search destinations and installed video add-on shortcuts
+
+[B]0.1.9[/B]
+- Keep live artwork in persistent profile data and recover missing images after updates
+- Bundled promo service for direct skin ZIP installation without a third-party repository
+- Kept existing companion-service installations compatible without duplicate rotation
+
 [B]0.1.8[/B]
 • Added explicit install-time dependencies for the promo service and weather icon resources
 • Added release-build validation for local dependency packaging

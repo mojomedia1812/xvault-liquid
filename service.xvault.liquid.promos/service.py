@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import datetime as _datetime
 import html
+import hashlib
 import json
 import re
 import socket
 import sys
+import threading
 import time
 import unicodedata
 import urllib.error
@@ -18,6 +20,7 @@ SKIN_ID = "skin.xvault.liquid"
 XVAULT_VIDEO_ADDON_ID = "plugin.video.xvault"
 JUSTWATCH_BASE_URL = "https://www.justwatch.com"
 JUSTWATCH_SERIES_URL = f"{JUSTWATCH_BASE_URL}/de/Serien"
+JUSTWATCH_MOVIES_URL = f"{JUSTWATCH_BASE_URL}/de/Filme"
 JUSTWATCH_IMAGE_BASE = "https://images.justwatch.com"
 TVMAZE_API_URL = "https://www.tvmaze.com/api"
 USER_AGENT = "Mozilla/5.0 xVAULT-Liquid-Kodi-Skin/0.1.7 (+https://www.justwatch.com/de/Serien)"
@@ -344,6 +347,10 @@ def _skin_root() -> Path:
 
 
 def _promo_dir() -> Path:
+    if IS_KODI:
+        return Path(_translate_kodi_path(
+            "special://profile/addon_data/skin.xvault.liquid/promos"
+        ))
     return _skin_root() / "media" / "promos"
 
 
@@ -467,7 +474,9 @@ def _download(url: str, target: Path, timeout: int = 25) -> bool:
     if not data or "image" not in content_type.lower():
         return False
 
-    target.write_bytes(data)
+    temporary = target.with_suffix(target.suffix + ".part")
+    temporary.write_bytes(data)
+    temporary.replace(target)
     return True
 
 
@@ -654,9 +663,9 @@ def _jw_rank(data: list, show: dict) -> int | None:
     return None
 
 
-def _jw_catalog_items() -> list[dict]:
+def _jw_catalog_items(media_type: str = "tvshow") -> list[dict]:
     try:
-        markup = _fetch_text(JUSTWATCH_SERIES_URL)
+        markup = _fetch_text(JUSTWATCH_MOVIES_URL if media_type == "movie" else JUSTWATCH_SERIES_URL)
     except Exception as exc:
         _log(f"JustWatch catalogue fetch failed: {exc}")
         return []
@@ -670,14 +679,14 @@ def _jw_catalog_items() -> list[dict]:
     items: list[dict] = []
     seen_paths: set[str] = set()
     for key, value in cache.items():
-        if not key.startswith("Show:"):
+        if not key.startswith("Movie:" if media_type == "movie" else "Show:"):
             continue
 
         show = _jw_dict(data, value)
         content = _jw_show_content(data, show)
         full_path = _jw_string(data, content.get("fullPath"))
         title = _jw_string(data, content.get("title"))
-        if not full_path.startswith("/de/Serie/") or not title or full_path in seen_paths:
+        if not full_path.startswith("/de/Film/" if media_type == "movie" else "/de/Serie/") or not title or full_path in seen_paths:
             continue
 
         seen_paths.add(full_path)
@@ -689,6 +698,7 @@ def _jw_catalog_items() -> list[dict]:
         items.append(
             {
                 "source_name": "JustWatch",
+                "media_type": media_type,
                 "show": title,
                 "episode": "",
                 "year": _jw_int(data, content.get("originalReleaseYear")),
@@ -720,9 +730,10 @@ def _jw_detail_item(item: dict) -> dict:
     full_path = str(url).replace(JUSTWATCH_BASE_URL, "", 1)
     selected_show: dict = {}
     selected_content: dict = {}
+    node_prefix = "Movie:" if item.get("media_type") == "movie" else "Show:"
 
     for key, value in cache.items():
-        if not key.startswith("Show:"):
+        if not key.startswith(node_prefix):
             continue
 
         show = _jw_dict(data, value)
@@ -734,7 +745,7 @@ def _jw_detail_item(item: dict) -> dict:
 
     if not selected_content:
         for key, value in cache.items():
-            if key.startswith("Show:"):
+            if key.startswith(node_prefix):
                 selected_show = _jw_dict(data, value)
                 selected_content = _jw_show_content(data, selected_show)
                 break
@@ -772,8 +783,8 @@ def _jw_detail_item(item: dict) -> dict:
     return detail
 
 
-def _collect_justwatch_items() -> list[dict]:
-    items = _jw_catalog_items()
+def _collect_justwatch_items(media_type: str = "tvshow") -> list[dict]:
+    items = _jw_catalog_items(media_type)
     if not items:
         return []
 
@@ -918,18 +929,20 @@ def _stale(stamp: Path) -> bool:
     return age_seconds > REFRESH_HOURS * 60 * 60
 
 
-def update_promos(force: bool = False) -> int:
+def update_promos(force: bool = False, media_type: str = "tvshow") -> int:
     promo_dir = _promo_dir()
+    if media_type == "movie":
+        promo_dir = promo_dir / "movies"
     promo_dir.mkdir(parents=True, exist_ok=True)
     stamp = promo_dir / ".xvault-promos-updated"
 
-    if not force and not _stale(stamp):
+    if not force and not _stale(stamp) and _load_live_items(promo_dir):
         _log("promo cache is fresh")
         return 0
 
     today = _datetime.date.today()
-    items = _collect_justwatch_items()
-    if len(items) < 5:
+    items = _collect_justwatch_items(media_type)
+    if media_type != "movie" and len(items) < 5:
         _log("not enough JustWatch promos, trying TVmaze fallback")
         items.extend(_collect_tvmaze_items(today))
         items.extend(_collect_tvmaze_items(today - _datetime.timedelta(days=1)))
@@ -940,30 +953,27 @@ def update_promos(force: bool = False) -> int:
         _log("no promo candidates found")
         return 0
 
-    for old_file in promo_dir.glob("live-*.jpg"):
-        try:
-            old_file.unlink()
-        except OSError:
-            pass
-
     downloaded = 0
     manifest: list[dict] = []
     for index, item in enumerate(selected, 1):
-        file_name = f"live-{index:02d}-{_slug(item['show'])}.jpg"
+        image_key = hashlib.sha256(item["image"].encode("utf-8")).hexdigest()[:12]
+        file_name = f"live-{index:02d}-{_slug(item['show'])}-{image_key}.jpg"
         target = promo_dir / file_name
         if _download(item["image"], target):
             downloaded += 1
             manifest.append({**item, "file": file_name})
 
     if downloaded:
-        (promo_dir / "justwatch-promos.json").write_text(
+        manifest_path = promo_dir / "justwatch-promos.json"
+        temporary_manifest = manifest_path.with_suffix(".json.part")
+        temporary_manifest.write_text(
             json.dumps(manifest, indent=2, ensure_ascii=False),
             encoding="utf-8",
         )
+        temporary_manifest.replace(manifest_path)
         (promo_dir / "source-justwatch.txt").write_text(
-            "Live promo images and metadata are loaded from JustWatch Germany series pages.\n"
-            f"Catalogue: {JUSTWATCH_SERIES_URL}\n"
-            f"Fallback API: {TVMAZE_API_URL}\n"
+            "Live promo images and metadata are loaded from JustWatch Germany.\n"
+            f"Catalogue: {JUSTWATCH_MOVIES_URL if media_type == 'movie' else JUSTWATCH_SERIES_URL}\n"
             "Downloaded artwork remains a local runtime cache and is not bundled in release zips.\n",
             encoding="utf-8",
         )
@@ -1000,6 +1010,7 @@ def _load_live_items(promo_dir: Path) -> list[dict]:
                 "title": _shorten(str(entry.get("show") or "Serie"), 48),
                 "lookup_title": str(entry.get("show") or "Serie"),
                 "year": str(entry.get("year") or ""),
+                "media_type": str(entry.get("media_type") or "tvshow"),
                 "meta": _shorten(_meta_line(entry), 88),
                 "summary": _spotlight_summary(str(entry.get("summary") or "Keine Serienbeschreibung verfuegbar.")),
                 "source": str(entry.get("url") or "https://www.tvmaze.com/api"),
@@ -1029,9 +1040,42 @@ def _load_fallback_items(promo_dir: Path) -> list[dict]:
     return items
 
 
-def load_slider_items() -> list[dict]:
+def _local_movie_items() -> list[dict]:
+    result = _execute_json_rpc("VideoLibrary.GetMovies", {
+        "properties": ["title", "year", "fanart", "plot", "runtime"],
+        "sort": {"method": "dateadded", "order": "descending"},
+        "limits": {"start": 0, "end": MAX_DOWNLOADS},
+    }).get("result", {})
+    items = []
+    for movie in result.get("movies", []):
+        if not movie.get("fanart"):
+            continue
+        items.append({
+            "image": movie["fanart"], "title": _shorten(movie["title"], 48),
+            "lookup_title": movie["title"], "year": str(movie.get("year") or ""),
+            "meta": "  |  ".join(value for value in (
+                str(movie.get("year") or ""),
+                f"{movie['runtime'] // 60} min" if movie.get("runtime") else "",
+            ) if value),
+            "summary": _spotlight_summary(movie.get("plot") or ""),
+            "source": "library", "media_type": "movie", "movieid": movie["movieid"],
+        })
+    return items
+
+
+def load_slider_items(media_type: str = "tvshow") -> list[dict]:
     promo_dir = _promo_dir()
-    return _load_live_items(promo_dir) + _load_fallback_items(promo_dir)
+    if media_type == "movie":
+        movies = _load_live_items(promo_dir / "movies") or _local_movie_items()
+        if movies:
+            return [{**item, "media_type": "movie"} for item in movies]
+        return [{
+            "image": str(_skin_root() / "media/promos/00-liquid-wall.png"),
+            "title": "Filme im Spotlight", "lookup_title": "", "year": "",
+            "meta": "", "summary": "Aktuell keine Film-Highlights verfuegbar.",
+            "source": "local", "media_type": "movie",
+        }]
+    return _load_live_items(promo_dir) or _load_fallback_items(_skin_root() / "media" / "promos")
 
 
 def _publish(item: dict, index: int, total: int) -> None:
@@ -1040,10 +1084,13 @@ def _publish(item: dict, index: int, total: int) -> None:
         return
 
     lookup_title = str(item.get("lookup_title") or item.get("title") or "")
-    library_path = _find_local_tvshow_path(lookup_title)
+    media_type = item.get("media_type", "tvshow")
+    library_path = _find_local_tvshow_path(lookup_title) if media_type == "tvshow" and item.get("source") != "local" else ""
 
     window = xbmcgui.Window(HOME_WINDOW_ID)  # type: ignore[union-attr]
     window.setProperty("xvault_liquid_promo_image", item["image"])
+    window.setProperty("xvault_liquid_promo_type", media_type)
+    window.setProperty("xvault_liquid_promo_movieid", str(item.get("movieid") or ""))
     window.setProperty("xvault_liquid_promo_title", item["title"])
     window.setProperty("xvault_liquid_promo_lookup_title", lookup_title)
     window.setProperty("xvault_liquid_promo_year", str(item.get("year") or ""))
@@ -1056,6 +1103,38 @@ def _publish(item: dict, index: int, total: int) -> None:
         "true" if _is_xvault_addon_available() else "false",
     )
     window.setProperty("xvault_liquid_promo_position", f"{index + 1}/{total}")
+
+
+def _open_local_movie_info(movie_id: int) -> bool:
+    details = _execute_json_rpc("VideoLibrary.GetMovieDetails", {
+        "movieid": movie_id,
+        "properties": ["title", "year", "plot", "runtime", "art", "file", "genre", "rating", "mpaa", "trailer"],
+    }).get("result", {}).get("moviedetails")
+    if not details:
+        return False
+    item = xbmcgui.ListItem(label=details.get("title", ""), path=details.get("file", ""))
+    item.setArt(details.get("art", {}))
+    tag = item.getVideoInfoTag()
+    if hasattr(tag, "setDbId"):
+        tag.setDbId(movie_id)
+        tag.setMediaType("movie")
+        tag.setTitle(details.get("title", ""))
+        tag.setYear(details.get("year", 0))
+        tag.setPlot(details.get("plot", ""))
+        tag.setDuration(details.get("runtime", 0))
+        tag.setGenres(details.get("genre", []))
+        tag.setRating(details.get("rating", 0.0))
+        tag.setMpaa(details.get("mpaa", ""))
+        tag.setTrailer(details.get("trailer", ""))
+        tag.setFilenameAndPath(details.get("file", ""))
+    else:
+        # Kodi 19 exposes video metadata setters through ListItem.setInfo only.
+        item.setInfo("video", {
+            "dbid": movie_id, "mediatype": "movie", "title": details.get("title", ""),
+            "year": details.get("year", 0), "plot": details.get("plot", ""),
+            "duration": details.get("runtime", 0), "genre": details.get("genre", []),
+        })
+    return bool(xbmcgui.Dialog().info(item))
 
 
 def _open_spotlight() -> None:
@@ -1071,6 +1150,18 @@ def _open_spotlight() -> None:
     )
     library_path = window.getProperty("xvault_liquid_promo_library_path") or ""
     year = window.getProperty("xvault_liquid_promo_year") or ""
+
+    if window.getProperty("xvault_liquid_promo_type") == "movie":
+        movie_id = window.getProperty("xvault_liquid_promo_movieid")
+        if movie_id.isdigit():
+            if not _open_local_movie_info(int(movie_id)):
+                xbmc.executebuiltin("ActivateWindow(Videos,videodb://movies/titles/,return)")
+        elif window.getProperty("xvault_liquid_promo_source") != "local" and title and _is_xvault_addon_available(refresh=True):
+            query = urllib.parse.urlencode({"action": "movies", "page": "1", "query": title})
+            xbmc.executebuiltin(f"ActivateWindow(Videos,plugin://{XVAULT_VIDEO_ADDON_ID}/?{query},return)")
+        else:
+            xbmc.executebuiltin("ActivateWindow(Videos,videodb://movies/titles/,return)")
+        return
 
     if _open_xvault_tvshow(title, year):
         return
@@ -1093,38 +1184,77 @@ def _open_spotlight() -> None:
         xbmc.executebuiltin("ActivateWindow(Videos,sources://video/,return)")  # type: ignore[union-attr]
 
 
+def _focused_media_type(previous: str) -> str:
+    if xbmc.getCondVisibility("Window.IsActive(home) + Control.HasFocus(9100)"):
+        selected = xbmc.getInfoLabel("Container(9100).ListItem.Property(spotlight_type)")
+        if selected in {"movie", "tvshow"}:
+            return selected
+    return previous
+
+
+class SpotlightRotation:
+    def __init__(self, catalogues: dict[str, list[dict]]):
+        self.catalogues = catalogues
+        self.positions = {key: 0 for key in catalogues}
+        self.media_type = "tvshow"
+        self.deadline = 0.0
+
+    def select(self, media_type: str, now: float, changed: bool = False):
+        switched = media_type != self.media_type
+        self.media_type = media_type
+        items = self.catalogues[media_type]
+        if not items:
+            return None
+        if not switched and not changed and now < self.deadline:
+            return None
+        if not switched and not changed and self.deadline:
+            self.positions[media_type] += 1
+        self.positions[media_type] %= len(items)
+        self.deadline = now + ROTATION_SECONDS
+        index = self.positions[media_type]
+        return items[index], index, len(items)
+
+
 def _run_rotator(force: bool = False) -> None:
-    update_promos(force=force)
-    items = load_slider_items()
-    if not items:
-        _log("no slider items available")
-        return
-
-    _log(f"rotating {len(items)} promo items")
-
     if not IS_KODI:
+        media_type = "movie" if "--movies" in sys.argv else "tvshow"
+        update_promos(force=force, media_type=media_type)
+        items = load_slider_items(media_type)
         for index, item in enumerate(items):
             _publish(item, index, len(items))
         return
 
     monitor = xbmc.Monitor()  # type: ignore[union-attr]
-    index = 0
-    last_refresh = time.time()
+    rotation = SpotlightRotation({kind: load_slider_items(kind) for kind in ("tvshow", "movie")})
+    refreshed = threading.Event()
 
+    def refresh():
+        for kind in ("movie", "tvshow"):
+            if monitor.abortRequested():
+                break
+            try:
+                update_promos(force=force, media_type=kind)
+            except Exception as exc:
+                _log(f"{kind} refresh failed: {exc}")
+        refreshed.set()
+
+    worker = threading.Thread(target=refresh, name="xvault-promo-refresh", daemon=True)
+    worker.start()
+    last_refresh = time.monotonic()
     while not monitor.abortRequested():
-        _publish(items[index], index, len(items))
-        index = (index + 1) % len(items)
-
-        if monitor.waitForAbort(ROTATION_SECONDS):
+        changed = refreshed.is_set()
+        if changed:
+            refreshed.clear()
+            rotation.catalogues = {kind: load_slider_items(kind) for kind in rotation.catalogues}
+        selected = rotation.select(_focused_media_type(rotation.media_type), time.monotonic(), changed)
+        if selected:
+            _publish(*selected)
+        if monitor.waitForAbort(0.1):
             break
-
-        if time.time() - last_refresh > REFRESH_HOURS * 60 * 60:
-            update_promos(force=True)
-            refreshed = load_slider_items()
-            if refreshed:
-                items = refreshed
-                index = 0
-            last_refresh = time.time()
+        if not worker.is_alive() and time.monotonic() - last_refresh > REFRESH_HOURS * 60 * 60:
+            worker = threading.Thread(target=refresh, name="xvault-promo-refresh", daemon=True)
+            worker.start()
+            last_refresh = time.monotonic()
 
 
 def main() -> None:

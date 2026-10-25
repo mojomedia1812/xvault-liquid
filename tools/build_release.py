@@ -82,6 +82,8 @@ def should_include(addon_id: str, relative_path: Path) -> bool:
             return False
         if len(parts) >= 3 and parts[0] == "media" and parts[1] == "promos":
             promo_name = parts[2]
+            if promo_name == "movies":
+                return False
             if promo_name.startswith("live-"):
                 return False
             if promo_name.endswith("-promos.json"):
@@ -106,6 +108,12 @@ def build_addon_zip(addon_dir: Path) -> Path:
             if not should_include(addon_id, relative):
                 continue
             archive.write(path, Path(addon_id) / relative)
+
+        if addon_id == "skin.xvault.liquid":
+            archive.write(
+                ROOT / "service.xvault.liquid.promos" / "service.py",
+                f"{addon_id}/resources/lib/promos.py",
+            )
 
     return zip_path
 
@@ -244,9 +252,27 @@ def copy_for_upload(zip_paths: list[Path], metadata_path: Path) -> Path:
 
 def validate_zip(zip_path: Path) -> None:
     with zipfile.ZipFile(zip_path) as archive:
+        corrupt = archive.testzip()
+        if corrupt:
+            raise RuntimeError(f"{zip_path.name} contains corrupt member {corrupt}")
         bad = [name for name in archive.namelist() if "__pycache__" in name or name.endswith(".pyc")]
         if bad:
             raise RuntimeError(f"{zip_path.name} contains Python cache files: {bad[:3]}")
+
+        if zip_path.name.startswith("skin.xvault.liquid-"):
+            prefix = "skin.xvault.liquid/"
+            manifest = ET.fromstring(archive.read(prefix + "addon.xml"))
+            for dependency in manifest.findall("requires/import"):
+                if dependency.attrib["addon"] == "service.xvault.liquid.promos":
+                    raise RuntimeError("Standalone skin ZIP must not require the companion add-on")
+            for extension in manifest.findall("extension"):
+                library = extension.get("library")
+                if library and prefix + library not in archive.namelist():
+                    raise RuntimeError(f"Missing skin entry point: {library}")
+            embedded = archive.read(prefix + "resources/lib/promos.py")
+            source = ROOT / "service.xvault.liquid.promos" / "service.py"
+            if embedded != source.read_bytes():
+                raise RuntimeError("Bundled promo service does not match companion source")
 
 
 def main() -> None:

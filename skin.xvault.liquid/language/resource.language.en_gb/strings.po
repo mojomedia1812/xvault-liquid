@@ -1004,3 +1004,116 @@ msgstr ""
 msgctxt "#31615"
 msgid "Subtitle language"
 msgstr ""
+
+#: /xml/MyVideoNav.xml
+msgctxt "#31990"
+msgid "Back"
+msgstr ""
+
+msgctxt "#31800"
+msgid "Library"
+msgstr ""
+
+msgctxt "#31801"
+msgid "Series"
+msgstr ""
+
+msgctxt "#31802"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#31803"
+msgid "Seasons"
+msgstr ""
+
+msgctxt "#31804"
+msgid "Episodes"
+msgstr ""
+
+msgctxt "#31805"
+msgid "Music"
+msgstr ""
+
+msgctxt "#31806"
+msgid "Favourites"
+msgstr ""
+
+msgctxt "#31807"
+msgid "Add-ons"
+msgstr ""
+
+msgctxt "#31808"
+msgid "Discover"
+msgstr ""
+
+msgctxt "#31809"
+msgid "Continue watching"
+msgstr ""
+
+msgctxt "#31810"
+msgid "Search"
+msgstr ""
+
+msgctxt "#31811"
+msgid "Artwork"
+msgstr ""
+
+msgctxt "#31812"
+msgid "Watched"
+msgstr ""
+
+msgctxt "#31813"
+msgid "Focus mode"
+msgstr ""
+
+msgctxt "#31814"
+msgid "No items yet"
+msgstr ""
+
+msgctxt "#31815"
+msgid "View options"
+msgstr ""
+
+msgctxt "#31816"
+msgid "Rating"
+msgstr ""
+
+msgctxt "#31817"
+msgid "Cast"
+msgstr ""
+
+msgctxt "#31818"
+msgid "Details"
+msgstr ""
+
+msgctxt "#31819"
+msgid "Movies and series"
+msgstr ""
+
+msgctxt "#31820"
+msgid "Video add-ons"
+msgstr ""
+
+msgctxt "#31821"
+msgid "Audio add-ons"
+msgstr ""
+
+msgctxt "#31822"
+msgid "Games"
+msgstr ""
+
+msgctxt "#31823"
+msgid "Programs"
+msgstr ""
+
+msgctxt "#31824"
+msgid "Picture add-ons"
+msgstr ""
+
+msgctxt "#31825"
+msgid "Manage add-ons"
+msgstr ""
+
+msgctxt "#31826"
+msgid "Unwatched"
+msgstr ""

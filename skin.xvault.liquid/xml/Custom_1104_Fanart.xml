@@ -1,22 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <window type="dialog" id="1104">
-	<defaultcontrol always="true">3000</defaultcontrol>
-	<animation effect="fade" start="0" end="100" time="400">WindowOpen</animation>
-	<animation effect="fade" start="100" end="0" time="300">WindowClose</animation>
-	<controls>
-		<control type="image">
-			<include>FullScreenDimensions</include>
-			<aspectratio>scale</aspectratio>
-			<texture>colors/black.png</texture>
-		</control>
-		<control type="image">
-			<include>FullScreenDimensions</include>
-			<aspectratio>keep</aspectratio>
-			<texture>$INFO[Window(home).Property(fanart)]</texture>
-		</control>
-		<control type="button" id="3000">
-			<include>HiddenObject</include>
-			<onclick>Action(close)</onclick>
-		</control>
-	</controls>
+    <defaultcontrol always="true">3000</defaultcontrol>
+    <animation effect="fade" start="0" end="100" time="250">WindowOpen</animation>
+    <animation effect="fade" start="100" end="0" time="150">WindowClose</animation>
+    <controls>
+        <control type="image"><width>100%</width><height>100%</height><texture colordiffuse="ff050708">textures/white.png</texture></control>
+        <control type="image"><width>100%</width><height>100%</height><aspectratio>keep</aspectratio><texture background="true">$INFO[Window(Home).Property(fanart)]</texture></control>
+        <control type="button" id="3000"><width>100%</width><height>100%</height><label /><texturefocus /><texturenofocus /><onclick>Action(Close)</onclick></control>
+        <control type="image"><right>40</right><top>36</top><width>48</width><height>48</height><texture>icons/back.png</texture></control>
+    </controls>
 </window>
