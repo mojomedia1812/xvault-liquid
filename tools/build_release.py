@@ -5,6 +5,7 @@ import os
 import re
 import shutil
 import urllib.request
+import urllib.parse
 import zipfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -13,7 +14,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 REMOTE_ADDONS_XML = DIST / "xvault-remote-addons.xml"
-REMOTE_ADDONS_URL = "http://xvault.ddnss.de/addons.xml"
+REMOTE_ADDONS_URL = "https://xvault.repowork.de/addons.xml"
+DEPENDENCY_REPOSITORIES = {"plugin.video.xvault": "https://xvault.repowork.de/"}
 UPLOAD_DIR = DIST / "xvault-repo-upload"
 REPO_ID = "repository.xvault"
 EXTERNAL_REPOSITORY_DEPENDENCIES = {
@@ -154,11 +156,16 @@ def clone_addon_node(addon_dir: Path) -> ET.Element:
 
 
 def write_repository_metadata(addon_dirs: list[Path]) -> Path:
-    if not REMOTE_ADDONS_XML.exists():
-        try:
-            REMOTE_ADDONS_XML.write_bytes(urllib.request.urlopen(REMOTE_ADDONS_URL, timeout=20).read())
-        except Exception:
-            pass
+    try:
+        with urllib.request.urlopen(REMOTE_ADDONS_URL, timeout=20) as response:
+            remote_data = response.read()
+        if ET.fromstring(remote_data).tag != "addons":
+            raise ValueError("Unexpected repository metadata root")
+        REMOTE_ADDONS_XML.write_bytes(remote_data)
+    except Exception as exc:
+        if not REMOTE_ADDONS_XML.exists():
+            raise RuntimeError("Cannot build without xVAULT repository metadata") from exc
+        print(f"Repository refresh failed; using cached metadata: {exc}")
 
     if REMOTE_ADDONS_XML.exists():
         root = ET.parse(REMOTE_ADDONS_XML).getroot()
@@ -181,6 +188,48 @@ def write_repository_metadata(addon_dirs: list[Path]) -> Path:
     data = output.read_bytes()
     (DIST / "addons.xml.md5").write_text(hashlib.md5(data).hexdigest(), encoding="ascii")
     return output
+
+
+def fetch_dependency_zips(addon_dirs: list[Path], metadata_path: Path) -> list[Path]:
+    metadata = {node.get("id"): node for node in ET.parse(metadata_path).getroot().findall("addon")}
+    local_ids = {addon_info(path)[0] for path in addon_dirs}
+    required = {}
+    for path in addon_dirs:
+        for addon_id, version in required_imports(path):
+            if addon_id not in local_ids and not is_builtin_dependency(addon_id) and addon_id not in EXTERNAL_REPOSITORY_DEPENDENCIES:
+                if version_satisfies(version, required.get(addon_id, "")):
+                    required[addon_id] = version
+
+    archives = []
+    for addon_id, minimum in required.items():
+        base_url = DEPENDENCY_REPOSITORIES.get(addon_id)
+        node = metadata.get(addon_id)
+        if not base_url or node is None:
+            raise RuntimeError(f"No trusted package source for required add-on {addon_id}")
+        version = node.get("version", "")
+        if not version_satisfies(version, minimum):
+            raise RuntimeError(f"{addon_id} requires >= {minimum}, repository offers {version}")
+        # IDs and versions become filesystem paths as well as URL segments.
+        if not re.fullmatch(r"[a-zA-Z0-9._-]+", addon_id) or not re.fullmatch(r"[a-zA-Z0-9._+-]+", version):
+            raise RuntimeError("Unsafe repository package identity")
+        name = f"{addon_id}-{version}.zip"
+        target = DIST / name
+        temporary = target.with_suffix(".zip.part")
+        url = base_url + urllib.parse.quote(addon_id) + "/" + urllib.parse.quote(name)
+        try:
+            with urllib.request.urlopen(url, timeout=60) as response, temporary.open("wb") as output:
+                shutil.copyfileobj(response, output)
+            validate_zip(temporary)
+            with zipfile.ZipFile(temporary) as archive:
+                manifest = ET.fromstring(archive.read(f"{addon_id}/addon.xml"))
+            if manifest.get("id") != addon_id or manifest.get("version") != version:
+                raise RuntimeError(f"Downloaded package identity does not match {name}")
+            temporary.replace(target)
+        finally:
+            if temporary.exists():
+                temporary.unlink()
+        archives.append(target)
+    return archives
 
 
 def validate_dependency_resolution(addon_dirs: list[Path], metadata_path: Path, zip_paths: list[Path]) -> None:
@@ -213,7 +262,7 @@ def validate_dependency_resolution(addon_dirs: list[Path], metadata_path: Path, 
                 raise RuntimeError(
                     f"{addon_id} requires {dependency_id}, but it is missing from {metadata_path.name}"
                 )
-            if dependency_id in local_versions and dependency_id not in zipped_ids:
+            if dependency_id not in zipped_ids:
                 raise RuntimeError(
                     f"{addon_id} requires {dependency_id}, but no {dependency_id} zip is included"
                 )
@@ -283,11 +332,11 @@ def main() -> None:
         ROOT / "skin.xvault.liquid",
     ]
     addon_zips = [build_addon_zip(path) for path in addon_dirs if path.exists()]
-    zip_paths = addon_zips
+    metadata_path = write_repository_metadata(addon_dirs)
+    zip_paths = addon_zips + fetch_dependency_zips(addon_dirs, metadata_path)
     for zip_path in zip_paths:
         validate_zip(zip_path)
 
-    metadata_path = write_repository_metadata(addon_dirs)
     validate_dependency_resolution(addon_dirs, metadata_path, zip_paths)
     upload_zip = copy_for_upload(zip_paths, metadata_path)
 

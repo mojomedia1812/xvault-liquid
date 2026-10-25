@@ -8,7 +8,7 @@ Kodi skin fuer eine tvOS-26-inspirierte Wohnzimmeroberflaeche: grosser Serien-Pr
 - `service.xvault.liquid.promos`: Companion-Service fuer aktuelle deutsche Film- und Serien-Backdrops und Spotlight-Metadaten.
 - `repository.xvault`: Repository-Add-on fuer den ZIP-Einstieg in Kodi.
 - `dist/addons.xml` und `dist/addons.xml.md5`: fertige Kodi-Repository-Metadaten.
-- `dist/xvault-repo-upload-0.2.0.zip`: Upload-Paket fuer den xVAULT-Repo-Webroot ohne HTML/Pages.
+- `dist/xvault-repo-upload-0.2.1.zip`: Upload-Paket fuer den xVAULT-Repo-Webroot ohne HTML/Pages, einschliesslich des geprueften offiziellen xVAULT-Video-ZIPs.
 
 ## Funktionen
 
@@ -31,21 +31,23 @@ Kodi skin fuer eine tvOS-26-inspirierte Wohnzimmeroberflaeche: grosser Serien-Pr
 
 ## Kodi-Installation
 
-### Direkt aus ZIP installieren
+### Aus ZIP installieren
 
 1. In Kodi: Add-ons -> Aus ZIP-Datei installieren.
-2. `dist/skin.xvault.liquid-0.2.0.zip` auswaehlen.
-3. Danach Skin wechseln: Einstellungen -> Interface -> Skin -> `xVAULT Liquid`.
+2. Einmalig `dist/repository.xvault-1.0.3.zip` installieren oder ein vorhandenes xVAULT Repository darauf aktualisieren. Es verwendet `https://xvault.repowork.de/`.
+3. Repository-Aktualisierung abwarten; das xVAULT Repository und das offizielle Kodi-Repository muessen aktiviert und erreichbar sein.
+4. `dist/skin.xvault.liquid-0.2.1.zip` auswaehlen. Kodi installiert `plugin.video.xvault` automatisch als Pflichtabhaengigkeit, falls noch keine ausreichend aktuelle Version vorhanden ist.
+5. Danach Skin wechseln: Einstellungen -> Interface -> Skin -> `xVAULT Liquid`.
 
-Der Promo-Dienst ist im Skin-ZIP enthalten. Das xVAULT Repository und ein separates Service-ZIP werden dafuer nicht benoetigt. Python und die Standard-Wettericons gehoeren zur regulaeren Kodi-Installation; fehlende Wettericons kann Kodi aus seinem offiziellen Repository aufloesen. Kodi muss `xbmc.gui` 5.18.0 unterstuetzen. Die Einstellung fuer unbekannte Quellen muss ZIP-Installationen erlauben.
+Der Promo-Dienst ist im Skin-ZIP enthalten; ein separates Service-ZIP ist nicht erforderlich. Fuer die automatische xVAULT-Installation ist dagegen das xVAULT Repository erforderlich. Kodi prueft Pflichtabhaengigkeiten vor dem Auspacken des Skins und findet keine beliebigen ZIPs daneben oder darin. Ohne eingerichtetes Repository kann das Skin-ZIP xVAULT daher nicht selbst installieren. Fehlende Wettericons kann Kodi aus seinem offiziellen Repository aufloesen. Kodi muss `xbmc.gui` 5.18.0 unterstuetzen. Die Einstellung fuer unbekannte Quellen muss ZIP-Installationen erlauben.
 
-Ein bereits installierter und aktivierter separater Promo-Service uebernimmt weiterhin die Rotation; der integrierte Dienst startet dann keine zweite Rotation. Optionale Erweiterungen wie xVAULT Video oder YouTube werden bei Bedarf separat installiert.
+Ein bereits installierter und aktivierter separater Promo-Service uebernimmt weiterhin die Rotation; der integrierte Dienst startet dann keine zweite Rotation. Erweiterungen wie YouTube bleiben optional; xVAULT Video ist ab Skin-Version 0.2.1 eine Pflichtabhaengigkeit.
 
 ### Aus dem xVAULT Repository
 
 1. In Kodi: Add-ons -> Aus ZIP-Datei installieren.
-2. `dist/repository.xvault-1.0.2.zip` installieren, falls das xVAULT Repository noch nicht vorhanden ist.
-3. Aus dem xVAULT Repository `xVAULT Liquid` installieren.
+2. `dist/repository.xvault-1.0.3.zip` installieren, falls das aktuelle xVAULT Repository noch nicht vorhanden ist.
+3. Nach Veroeffentlichung der neuen Skin-Version auf dem Repository-Webserver aus dem xVAULT Repository `xVAULT Liquid` installieren. Kodi installiert fehlendes xVAULT Video automatisch mit.
 4. Der Promo-Dienst ist bereits im Skin enthalten.
 5. Kodi laedt ausserdem das Standardpaket `resource.images.weathericons.default` aus dem offiziellen Kodi-Repository nach, falls es noch fehlt.
 6. Danach Skin wechseln: Einstellungen -> Interface -> Skin -> `xVAULT Liquid`.
@@ -56,7 +58,7 @@ Ein bereits installierter und aktivierter separater Promo-Service uebernimmt wei
 - `xbmc.python` 3.0.0 fuer den Promo-Service.
 - `resource.images.weathericons.default` fuer die Skin-Weather-Icons.
 - Der Promo-Dienst wird direkt im Skin-ZIP mitgeliefert. `service.xvault.liquid.promos` ist fuer bestehende Installationen weiterhin verfuegbar, aber keine Pflichtabhaengigkeit mehr.
-- `plugin.video.xvault` ist optional. Es wird nicht automatisch installiert und nur genutzt, wenn es bereits vorhanden ist.
+- `plugin.video.xvault` >= `2026.10.24.1` ist verpflichtend und wird von Kodi aus dem eingerichteten xVAULT Repository nachinstalliert bzw. bei Bedarf aktualisiert. Eine passende bereits vorhandene Version wird weiterverwendet.
 
 Der Service aktualisiert die Promobilder im Hintergrund maximal alle 8 Stunden. Die Live-Daten stammen von `https://www.justwatch.com/de/Serien` und `https://www.justwatch.com/de/Filme`; TVmaze bleibt ausschliesslich fuer Serien als technische Reserve im Code. Heruntergeladene Promo-Bilder sind nur lokaler Runtime-Cache und werden nicht in Release-ZIPs gebuendelt.
 
@@ -70,15 +72,16 @@ python .\tools\build_release.py
 
 Das erzeugt:
 
-- `dist/repository.xvault-1.0.2.zip`
+- `dist/repository.xvault-1.0.3.zip`
 - `dist/service.xvault.liquid.promos-0.2.0.zip`
-- `dist/skin.xvault.liquid-0.2.0.zip`
+- `dist/skin.xvault.liquid-0.2.1.zip`
+- `dist/plugin.video.xvault-<Repository-Version>.zip` (vom offiziellen HTTPS-Repository geladen und geprueft)
 - `dist/addons.xml`
 - `dist/addons.xml.md5`
-- `dist/xvault-repo-upload-0.2.0.zip`
+- `dist/xvault-repo-upload-0.2.1.zip`
 
 Der Build bricht ab, wenn eine lokale Pflichtabhaengigkeit zwar in einer `addon.xml` steht, aber nicht in `dist/addons.xml` oder im Upload-Paket enthalten ist.
-Zusaetzlich prueft er die ZIP-Integritaet, Skin-Einstiegspunkte und den eingebetteten Promo-Code. Das Upload-Paket ist fuer den Webserver bestimmt und kein direkt installierbares Kodi-Add-on-ZIP.
+Zusaetzlich laedt er aktuelle Repository-Metadaten und das benoetigte xVAULT-Video-Paket von `https://xvault.repowork.de/`. Bei fehlendem Paket, beschaedigtem ZIP oder abweichender Add-on-ID/Version bricht der Build ab. Er prueft ausserdem Skin-Einstiegspunkte und den eingebetteten Promo-Code. Das Upload-Paket ist fuer den Webserver bestimmt und kein direkt installierbares Kodi-Add-on-ZIP. Ein lokaler Build aktualisiert den Webserver nicht automatisch.
 
 ## Entwicklung
 

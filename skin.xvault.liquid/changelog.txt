@@ -1,3 +1,7 @@
+[B]0.2.1[/B]
+- Require xVAULT Video so Kodi installs missing copies through its dependency resolver
+- Update repository bootstrap to HTTPS and validate the official xVAULT package in release builds
+
 [B]0.2.0[/B]
 - Keep the shared navigation rail visible across home, settings, file, media and TV menus
 - Switch home spotlight between movies and series on dock focus, with independent positions

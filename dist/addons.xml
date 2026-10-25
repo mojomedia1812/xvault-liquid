@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <addons>
-    <addon id="plugin.video.xvault" version="2026.09.23.3" name="[B]xVAULT[/B]" provider-name="xVAULT">
+    <addon id="plugin.video.xvault" version="2026.10.24.1" name="[B]xVAULT[/B]" provider-name="xVAULT">
         <requires>
             <import addon="xbmc.python" version="3.0.0" />
             <import addon="script.module.requests" optional="true" />
@@ -23,9 +23,9 @@
         <extension point="xbmc.addon.metadata">
             <summary lang="de_DE">Filme, Serien und LiveTV durchsuchen und wiedergeben</summary>
             <summary lang="en_GB">Browse and play movies, TV shows and live TV</summary>
-            <description lang="de_DE">xVAULT ist ein Kodi-Video-Add-on zum Suchen, Verwalten und Wiedergeben von Filmen, Serien und LiveTV mit Quellenwahl, Favoriten, Wiedergabestatus und optionaler Synchronisation. Die offizielle Repository- und Updateadresse ist http://xvault.ddnss.de/. Support kann nur für Installationen aus dem offiziellen xVAULT-Repository geleistet werden; Pakete aus fremden Repositories, Reuploads oder veränderte Versionen lassen sich nicht zuverlässig prüfen.</description>
-            <description lang="en_GB">xVAULT is a Kodi video add-on for browsing and playing movies, TV shows and live TV with source selection, favorites, watched status and optional synchronization. The official repository and update address is http://xvault.ddnss.de/. Support is available only for installations from the official xVAULT repository; packages from third-party repositories, reuploads or modified builds cannot be verified reliably.</description>
-            <website>http://xvault.ddnss.de/</website>
+            <description lang="de_DE">xVAULT ist ein Kodi-Video-Add-on zum Suchen, Verwalten und Wiedergeben von Filmen, Serien und LiveTV mit Quellenwahl, Favoriten, Wiedergabestatus und optionaler Synchronisation. Die offizielle Repository- und Updateadresse ist https://xvault.repowork.de/. Support kann nur für Installationen aus dem offiziellen xVAULT-Repository geleistet werden; Pakete aus fremden Repositories, Reuploads oder veränderte Versionen lassen sich nicht zuverlässig prüfen.</description>
+            <description lang="en_GB">xVAULT is a Kodi video add-on for browsing and playing movies, TV shows and live TV with source selection, favorites, watched status and optional synchronization. The official repository and update address is https://xvault.repowork.de/. Support is available only for installations from the official xVAULT repository; packages from third-party repositories, reuploads or modified builds cannot be verified reliably.</description>
+            <website>https://xvault.repowork.de/</website>
             <platform>all</platform>
             <assets>
                 <icon>resources/icon.png</icon>
@@ -34,12 +34,12 @@
             </assets>
         </extension>
     </addon>
-    <addon id="repository.xvault" name="xVAULT Repository" provider-name="xVAULT" version="1.0.2">
+    <addon id="repository.xvault" name="xVAULT Repository" provider-name="xVAULT" version="1.0.3">
         <extension point="xbmc.addon.repository" name="xVAULT Repository">
             <dir>
-                <info compressed="false">http://xvault.ddnss.de/addons.xml</info>
-                <checksum>http://xvault.ddnss.de/addons.xml.md5</checksum>
-                <datadir zip="true">http://xvault.ddnss.de/</datadir>
+                <info compressed="false">https://xvault.repowork.de/addons.xml</info>
+                <checksum>https://xvault.repowork.de/addons.xml.md5</checksum>
+                <datadir zip="true">https://xvault.repowork.de/</datadir>
             </dir>
         </extension>
         <extension point="xbmc.addon.metadata">
@@ -72,10 +72,11 @@
             <source>https://www.justwatch.com/de/Serien</source>
         </extension>
     </addon>
-    <addon id="skin.xvault.liquid" version="0.2.0" name="xVAULT Liquid" provider-name="xVAULT">
+    <addon id="skin.xvault.liquid" version="0.2.1" name="xVAULT Liquid" provider-name="xVAULT">
         <requires>
             <import addon="xbmc.gui" version="5.18.0" />
             <import addon="xbmc.python" version="3.0.0" />
+            <import addon="plugin.video.xvault" version="2026.10.24.1" />
             <import addon="resource.images.weathericons.default" version="1.0.0" />
         </requires>
         <extension point="xbmc.gui.skin" debugging="false">
@@ -102,7 +103,7 @@
                 <screenshot>resources/fanart.png</screenshot>
             </assets>
             <source>https://www.justwatch.com/de/Serien</source>
-            <news>0.2.0 - Unified Liquid media navigation, artwork viewer, cast details, focus mode and installed add-on shortcuts. Includes the promo service for direct ZIP installation.</news>
+            <news>0.2.1 - Require xVAULT Video so Kodi installs it automatically from the configured xVAULT repository. Repository bootstrap updated to HTTPS.</news>
         </extension>
     </addon>
 </addons>

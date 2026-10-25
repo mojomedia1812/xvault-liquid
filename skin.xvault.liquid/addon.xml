@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="skin.xvault.liquid" version="0.2.0" name="xVAULT Liquid" provider-name="xVAULT">
+<addon id="skin.xvault.liquid" version="0.2.1" name="xVAULT Liquid" provider-name="xVAULT">
 	<requires>
 		<import addon="xbmc.gui" version="5.18.0"/>
 		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="plugin.video.xvault" version="2026.10.24.1"/>
 		<import addon="resource.images.weathericons.default" version="1.0.0"/>
 	</requires>
 	<extension point="xbmc.gui.skin" debugging="false">
@@ -29,6 +30,6 @@
 			<screenshot>resources/fanart.png</screenshot>
 		</assets>
 		<source>https://www.justwatch.com/de/Serien</source>
-		<news>0.2.0 - Unified Liquid media navigation, artwork viewer, cast details, focus mode and installed add-on shortcuts. Includes the promo service for direct ZIP installation.</news>
+		<news>0.2.1 - Require xVAULT Video so Kodi installs it automatically from the configured xVAULT repository. Repository bootstrap updated to HTTPS.</news>
 	</extension>
 </addon>

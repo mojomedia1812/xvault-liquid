@@ -20,7 +20,7 @@ def load_module(name, path):
 
 
 class StandaloneZipTests(unittest.TestCase):
-    def test_zip_contains_service_and_only_kodi_dependencies(self):
+    def test_zip_contains_service_and_required_xvault_dependency(self):
         build = load_module("build_release", ROOT / "tools/build_release.py")
         with tempfile.TemporaryDirectory() as directory:
             with patch.object(build, "DIST", Path(directory)):
@@ -31,7 +31,11 @@ class StandaloneZipTests(unittest.TestCase):
                     dependencies = {node.get("addon") for node in manifest.findall("requires/import")}
                     self.assertEqual(dependencies, {
                         "xbmc.gui", "xbmc.python", "resource.images.weathericons.default",
+                        "plugin.video.xvault",
                     })
+                    xvault = manifest.find("requires/import[@addon='plugin.video.xvault']")
+                    self.assertEqual(xvault.get("version"), "2026.10.24.1")
+                    self.assertNotEqual(xvault.get("optional", "false"), "true")
                     self.assertIsNotNone(manifest.find("extension[@point='xbmc.service']"))
 
     def test_launcher_without_companion_runs_bundled_code(self):
