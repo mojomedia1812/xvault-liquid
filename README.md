@@ -8,7 +8,7 @@ Kodi skin fuer eine tvOS-26-inspirierte Wohnzimmeroberflaeche: grosser Serien-Pr
 - `service.xvault.liquid.promos`: Companion-Service fuer aktuelle deutsche Film- und Serien-Backdrops und Spotlight-Metadaten.
 - `repository.xvault`: Repository-Add-on fuer den ZIP-Einstieg in Kodi.
 - `dist/addons.xml` und `dist/addons.xml.md5`: fertige Kodi-Repository-Metadaten.
-- `dist/xvault-repo-upload-0.2.1.zip`: Upload-Paket fuer den xVAULT-Repo-Webroot ohne HTML/Pages, einschliesslich des geprueften offiziellen xVAULT-Video-ZIPs.
+- `dist/xvault-repo-upload-0.2.2.zip`: Upload-Paket fuer den xVAULT-Repo-Webroot ohne HTML/Pages, einschliesslich des geprueften offiziellen xVAULT-Video-ZIPs.
 
 ## Funktionen
 
@@ -36,7 +36,7 @@ Kodi skin fuer eine tvOS-26-inspirierte Wohnzimmeroberflaeche: grosser Serien-Pr
 1. In Kodi: Add-ons -> Aus ZIP-Datei installieren.
 2. Einmalig `dist/repository.xvault-1.0.3.zip` installieren oder ein vorhandenes xVAULT Repository darauf aktualisieren. Es verwendet `https://xvault.repowork.de/`.
 3. Repository-Aktualisierung abwarten; das xVAULT Repository und das offizielle Kodi-Repository muessen aktiviert und erreichbar sein.
-4. `dist/skin.xvault.liquid-0.2.1.zip` auswaehlen. Kodi installiert `plugin.video.xvault` automatisch als Pflichtabhaengigkeit, falls noch keine ausreichend aktuelle Version vorhanden ist.
+4. `dist/skin.xvault.liquid-0.2.2.zip` auswaehlen. Kodi installiert `plugin.video.xvault` automatisch als Pflichtabhaengigkeit, falls noch keine ausreichend aktuelle Version vorhanden ist.
 5. Danach Skin wechseln: Einstellungen -> Interface -> Skin -> `xVAULT Liquid`.
 
 Der Promo-Dienst ist im Skin-ZIP enthalten; ein separates Service-ZIP ist nicht erforderlich. Fuer die automatische xVAULT-Installation ist dagegen das xVAULT Repository erforderlich. Kodi prueft Pflichtabhaengigkeiten vor dem Auspacken des Skins und findet keine beliebigen ZIPs daneben oder darin. Ohne eingerichtetes Repository kann das Skin-ZIP xVAULT daher nicht selbst installieren. Fehlende Wettericons kann Kodi aus seinem offiziellen Repository aufloesen. Kodi muss `xbmc.gui` 5.18.0 unterstuetzen. Die Einstellung fuer unbekannte Quellen muss ZIP-Installationen erlauben.
@@ -74,14 +74,24 @@ Das erzeugt:
 
 - `dist/repository.xvault-1.0.3.zip`
 - `dist/service.xvault.liquid.promos-0.2.0.zip`
-- `dist/skin.xvault.liquid-0.2.1.zip`
+- `dist/skin.xvault.liquid-0.2.2.zip`
 - `dist/plugin.video.xvault-<Repository-Version>.zip` (vom offiziellen HTTPS-Repository geladen und geprueft)
 - `dist/addons.xml`
 - `dist/addons.xml.md5`
-- `dist/xvault-repo-upload-0.2.1.zip`
+- `dist/xvault-repo-upload-0.2.2.zip`
 
 Der Build bricht ab, wenn eine lokale Pflichtabhaengigkeit zwar in einer `addon.xml` steht, aber nicht in `dist/addons.xml` oder im Upload-Paket enthalten ist.
 Zusaetzlich laedt er aktuelle Repository-Metadaten und das benoetigte xVAULT-Video-Paket von `https://xvault.repowork.de/`. Bei fehlendem Paket, beschaedigtem ZIP oder abweichender Add-on-ID/Version bricht der Build ab. Er prueft ausserdem Skin-Einstiegspunkte und den eingebetteten Promo-Code. Das Upload-Paket ist fuer den Webserver bestimmt und kein direkt installierbares Kodi-Add-on-ZIP. Ein lokaler Build aktualisiert den Webserver nicht automatisch.
+
+## Fernbedienung
+
+- Steuerkreuz bewegt den sichtbaren Fokus; OK oeffnet den markierten Eintrag oder fuehrt dessen Aktion aus. Native Kodi-Wiedergabeaktionen bleiben erhalten.
+- Home startet einmal pro Sitzung bei Serien. Hoch/Runter folgt Spotlight, vorhandener Bibliotheksreihe und Dock. Leere Reihen werden uebersprungen; am unteren Rand bleibt der Fokus im Dock.
+- In vertikalen Liquid-Listen blaettern Hoch/Runter ohne Sprung in Kopfzeile oder Optionen. Links oeffnet den Fokus der Seitenleiste, Rechts die Ansichtsoptionen. An Listenenden wird nicht zum anderen Ende gesprungen.
+- In Posterreihen blaettern Links/Rechts, Links am Anfang fuehrt zur Seitenleiste und Hoch zum Optionssymbol. OK am Optionssymbol oeffnet die Ansichtsoptionen.
+- Zurueck in Seitenleiste oder Ansichtsoptionen bringt den Fokus zum Inhalt, ohne den Ordner zu verlassen. Zurueck im Inhalt verwendet Kodis normale Ordner-/Fensterhistorie; modale Suche und Infofenster schliessen mit Zurueck.
+- Serien und Filme in der Seitenleiste oeffnen dieselben xVAULT-Kategorien wie das Home-Dock. Die Seitenleiste bleibt in den Menues sichtbar; Beschriftungen folgen ihrem Fokus.
+- Info und Kontextmenue verwenden weiterhin Kodis native Belegung der jeweiligen Fernbedienung. Die Wiedergabesteuerung wird nicht durch globale Keymaps ueberschrieben.
 
 ## Entwicklung
 

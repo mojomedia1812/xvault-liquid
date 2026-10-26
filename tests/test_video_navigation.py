@@ -5,6 +5,21 @@ from liquid_xml import ROOT, XML, expanded_window
 
 
 class VideoNavigationTests(unittest.TestCase):
+    def test_detail_description_extends_to_footer_without_progress_overlap(self):
+        root = expanded_window("MyVideoNav.xml")
+        detail = next(group for group in root.findall(".//control[@type='group']")
+                      if group.findtext("visible") == "Control.IsVisible(50)")
+        plot = detail.find("control[@type='textbox']")
+        self.assertIsNone(plot.find("height"))
+        self.assertEqual(plot.findtext("bottom"), "110")
+        progress = next(label for label in detail.findall("control[@type='label']")
+                        if "PercentPlayed" in label.findtext("label", ""))
+        self.assertLessEqual(int(progress.findtext("top")) + int(progress.findtext("height")), 594)
+        for height in (1080, 1200, 1440):
+            plot_end = height - int(plot.findtext("bottom"))
+            self.assertGreater(plot_end - int(plot.findtext("top")), 130)
+            self.assertEqual(height - 86 - plot_end, 24)
+
     WINDOWS = (
         "MyVideoNav.xml", "MyFavourites.xml", "MyMusicNav.xml", "MyPrograms.xml",
         "AddonBrowser.xml", "Custom_1100_AddonLauncher.xml", "DialogVideoInfo.xml",
@@ -57,6 +72,8 @@ class VideoNavigationTests(unittest.TestCase):
         shortcuts = root.find(".//control[@id='9600']")
         self.assertEqual(shortcuts.findtext("content"), "addons://sources/video/")
         self.assertEqual(shortcuts.find("content").get("target"), "videos")
+        self.assertEqual(shortcuts.find("content").get("sortby"), "lastused")
+        self.assertEqual(shortcuts.find("content").get("sortorder"), "descending")
         self.assertEqual(shortcuts.find("itemlayout").attrib, shortcuts.find("focusedlayout").attrib)
         self.assertLess(int(shortcuts.findtext("top")) + int(shortcuts.findtext("height")), 1080 - 86)
         routes = root.findall(".//control[@id='50']/ondown")

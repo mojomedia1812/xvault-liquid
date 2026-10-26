@@ -12,8 +12,8 @@
 	<color name="grey">FFA0A0A0</color>
 	<color name="blue">FFACD8C5</color>
 	<color name="red">FFCE4421</color>
-	<color name="button_focus">FF365B50</color>
-	<color name="button_alt_focus">80365B50</color>
+	<color name="button_focus">FFB83232</color>
+	<color name="button_alt_focus">80B83232</color>
 	<color name="text_shadow">22000000</color>
 	<color name="border_alpha">60FFFFFF</color>
 	<color name="disabled">40FFFFFF</color>

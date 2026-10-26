@@ -37,12 +37,21 @@
         <value condition="String.IsEqual(ListItem.DBType,season)">$LOCALIZE[31804]</value>
         <value>$VAR[VideoInfoPlayButtonLabelVar]</value>
     </variable>
+    <variable name="LiquidRowTitleColor">
+        <value condition="Control.HasFocus(50)">ff101416</value>
+        <value>fff2f5f4</value>
+    </variable>
+    <variable name="LiquidRowSubtitleColor">
+        <value condition="Control.HasFocus(50)">ff53605e</value>
+        <value>ffb0c3bb</value>
+    </variable>
     <variable name="LiquidRowSubtitle">
         <value condition="!String.IsEmpty(ListItem.Label2)">$INFO[ListItem.Label2]</value>
         <value condition="!String.IsEmpty(ListItem.Artist)">$INFO[ListItem.Artist]</value>
         <value>$INFO[ListItem.Year]  $INFO[ListItem.Duration]</value>
     </variable>
     <include name="LiquidMenuButton">
+        <include>LiquidOptionsReturn</include>
         <height>62</height>
         <width>380</width>
         <font>font12</font>
@@ -68,6 +77,18 @@
                 <onright condition="Control.IsVisible(503) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">503</onright>
                 <onright condition="Control.IsVisible(504) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">504</onright>
                 <onright condition="![[String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)] + [Control.IsVisible(50) | Control.IsVisible(51) | Control.IsVisible(52) | Control.IsVisible(53) | Control.IsVisible(54) | Control.IsVisible(55) | Control.IsVisible(500) | Control.IsVisible(501) | Control.IsVisible(502) | Control.IsVisible(503) | Control.IsVisible(504)]]">$PARAM[return_id]</onright>
+                <onback condition="Control.IsVisible(50) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">50</onback>
+                <onback condition="Control.IsVisible(51) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">51</onback>
+                <onback condition="Control.IsVisible(52) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">52</onback>
+                <onback condition="Control.IsVisible(53) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">53</onback>
+                <onback condition="Control.IsVisible(54) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">54</onback>
+                <onback condition="Control.IsVisible(55) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">55</onback>
+                <onback condition="Control.IsVisible(500) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">500</onback>
+                <onback condition="Control.IsVisible(501) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">501</onback>
+                <onback condition="Control.IsVisible(502) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">502</onback>
+                <onback condition="Control.IsVisible(503) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">503</onback>
+                <onback condition="Control.IsVisible(504) + [String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)]">504</onback>
+                <onback condition="![[String.IsEqual($PARAM[return_id],50) | String.IsEqual($PARAM[return_id],55)] + [Control.IsVisible(50) | Control.IsVisible(51) | Control.IsVisible(52) | Control.IsVisible(53) | Control.IsVisible(54) | Control.IsVisible(55) | Control.IsVisible(500) | Control.IsVisible(501) | Control.IsVisible(502) | Control.IsVisible(503) | Control.IsVisible(504)]]">$PARAM[return_id]</onback>
         </definition>
     </include>
     <include name="LiquidNavigationRail">
@@ -100,7 +121,7 @@
                 <left>16</left>
                 <top>172</top>
                 <width>60</width>
-                <height>560</height>
+                <height>640</height>
                 <orientation>vertical</orientation>
                 <itemgap>18</itemgap>
                 <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
@@ -111,22 +132,56 @@
                     <width>60</width>
                     <height>60</height>
                     <control type="button" id="9301">
+                        <onup>9301</onup>
+                        <ondown>9308</ondown>
+                        <onleft>9301</onleft>
                     <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
                         <width>60</width>
                         <height>60</height>
-                        <label />
+                        <label>$LOCALIZE[10000]</label>
+                        <textcolor>00ffffff</textcolor>
+                        <focusedcolor>00ffffff</focusedcolor>
                         <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
                         <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
                         <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
                         <onclick>ActivateWindow(Home)</onclick>
-                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturefocus colordiffuse="ffb83232">textures/white.png</texturefocus>
                         <texturenofocus />
                     </control>
                     <control type="image">
-                        <left>18</left>
-                        <top>18</top>
-                        <width>24</width>
-                        <height>24</height>
+                        <left>14</left>
+                        <top>14</top>
+                        <width>32</width>
+                        <height>32</height>
+                        <texture>icons/home.png</texture>
+                        <aspectratio>keep</aspectratio>
+                    </control>
+                </control>
+                <control type="group">
+                    <width>60</width>
+                    <height>60</height>
+                    <control type="button" id="9308">
+                        <onup>9301</onup>
+                        <ondown>9302</ondown>
+                        <onleft>9308</onleft>
+                    <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
+                        <width>60</width>
+                        <height>60</height>
+                        <label>$LOCALIZE[31801]</label>
+                        <textcolor>00ffffff</textcolor>
+                        <focusedcolor>00ffffff</focusedcolor>
+                        <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
+                        <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
+                        <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
+                        <onclick>ActivateWindow(Videos,plugin://plugin.video.xvault/?action=tvNavigator,return)</onclick>
+                        <texturefocus colordiffuse="ffb83232">textures/white.png</texturefocus>
+                        <texturenofocus />
+                    </control>
+                    <control type="image">
+                        <left>14</left>
+                        <top>14</top>
+                        <width>32</width>
+                        <height>32</height>
                         <texture>icons/tv.png</texture>
                         <aspectratio>keep</aspectratio>
                     </control>
@@ -135,22 +190,27 @@
                     <width>60</width>
                     <height>60</height>
                     <control type="button" id="9302">
+                        <onup>9308</onup>
+                        <ondown>9303</ondown>
+                        <onleft>9302</onleft>
                     <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
                         <width>60</width>
                         <height>60</height>
-                        <label />
+                        <label>$LOCALIZE[31802]</label>
+                        <textcolor>00ffffff</textcolor>
+                        <focusedcolor>00ffffff</focusedcolor>
                         <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
                         <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
                         <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
-                        <onclick>ActivateWindow(Videos,root,return)</onclick>
-                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <onclick>ActivateWindow(Videos,plugin://plugin.video.xvault/?action=movieNavigator,return)</onclick>
+                        <texturefocus colordiffuse="ffb83232">textures/white.png</texturefocus>
                         <texturenofocus />
                     </control>
                     <control type="image">
-                        <left>18</left>
-                        <top>18</top>
-                        <width>24</width>
-                        <height>24</height>
+                        <left>14</left>
+                        <top>14</top>
+                        <width>32</width>
+                        <height>32</height>
                         <texture>icons/movies.png</texture>
                         <aspectratio>keep</aspectratio>
                     </control>
@@ -159,22 +219,27 @@
                     <width>60</width>
                     <height>60</height>
                     <control type="button" id="9303">
+                        <onup>9302</onup>
+                        <ondown>9304</ondown>
+                        <onleft>9303</onleft>
                     <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
                         <width>60</width>
                         <height>60</height>
-                        <label />
+                        <label>$LOCALIZE[31805]</label>
+                        <textcolor>00ffffff</textcolor>
+                        <focusedcolor>00ffffff</focusedcolor>
                         <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
                         <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
                         <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
                         <onclick>ActivateWindow(Music,root,return)</onclick>
-                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturefocus colordiffuse="ffb83232">textures/white.png</texturefocus>
                         <texturenofocus />
                     </control>
                     <control type="image">
-                        <left>18</left>
-                        <top>18</top>
-                        <width>24</width>
-                        <height>24</height>
+                        <left>14</left>
+                        <top>14</top>
+                        <width>32</width>
+                        <height>32</height>
                         <texture>icons/music.png</texture>
                         <aspectratio>keep</aspectratio>
                     </control>
@@ -183,22 +248,27 @@
                     <width>60</width>
                     <height>60</height>
                     <control type="button" id="9304">
+                        <onup>9303</onup>
+                        <ondown>9305</ondown>
+                        <onleft>9304</onleft>
                     <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
                         <width>60</width>
                         <height>60</height>
-                        <label />
+                        <label>$LOCALIZE[31806]</label>
+                        <textcolor>00ffffff</textcolor>
+                        <focusedcolor>00ffffff</focusedcolor>
                         <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
                         <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
                         <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
                         <onclick>ActivateWindow(favouritesbrowser)</onclick>
-                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturefocus colordiffuse="ffb83232">textures/white.png</texturefocus>
                         <texturenofocus />
                     </control>
                     <control type="image">
-                        <left>18</left>
-                        <top>18</top>
-                        <width>24</width>
-                        <height>24</height>
+                        <left>14</left>
+                        <top>14</top>
+                        <width>32</width>
+                        <height>32</height>
                         <texture>icons/star.png</texture>
                         <aspectratio>keep</aspectratio>
                     </control>
@@ -207,22 +277,27 @@
                     <width>60</width>
                     <height>60</height>
                     <control type="button" id="9305">
+                        <onup>9304</onup>
+                        <ondown>9306</ondown>
+                        <onleft>9305</onleft>
                     <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
                         <width>60</width>
                         <height>60</height>
-                        <label />
+                        <label>$LOCALIZE[31807]</label>
+                        <textcolor>00ffffff</textcolor>
+                        <focusedcolor>00ffffff</focusedcolor>
                         <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
                         <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
                         <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
                         <onclick>ActivateWindow(1100)</onclick>
-                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturefocus colordiffuse="ffb83232">textures/white.png</texturefocus>
                         <texturenofocus />
                     </control>
                     <control type="image">
-                        <left>18</left>
-                        <top>18</top>
-                        <width>24</width>
-                        <height>24</height>
+                        <left>14</left>
+                        <top>14</top>
+                        <width>32</width>
+                        <height>32</height>
                         <texture>icons/addons.png</texture>
                         <aspectratio>keep</aspectratio>
                     </control>
@@ -231,22 +306,27 @@
                     <width>60</width>
                     <height>60</height>
                     <control type="button" id="9306">
+                        <onup>9305</onup>
+                        <ondown>9307</ondown>
+                        <onleft>9306</onleft>
                     <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
                         <width>60</width>
                         <height>60</height>
-                        <label />
+                        <label>$LOCALIZE[31810]</label>
+                        <textcolor>00ffffff</textcolor>
+                        <focusedcolor>00ffffff</focusedcolor>
                         <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
                         <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
                         <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
                         <onclick>ActivateWindow(1107)</onclick>
-                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturefocus colordiffuse="ffb83232">textures/white.png</texturefocus>
                         <texturenofocus />
                     </control>
                     <control type="image">
-                        <left>18</left>
-                        <top>18</top>
-                        <width>24</width>
-                        <height>24</height>
+                        <left>14</left>
+                        <top>14</top>
+                        <width>32</width>
+                        <height>32</height>
                         <texture>icons/search.png</texture>
                         <aspectratio>keep</aspectratio>
                     </control>
@@ -255,104 +335,160 @@
                     <width>60</width>
                     <height>60</height>
                     <control type="button" id="9307">
+                        <onup>9306</onup>
+                        <ondown>9307</ondown>
+                        <onleft>9307</onleft>
                     <include content="LiquidRailReturn"><param name="return_id" value="$PARAM[return_id]" /></include>
                         <width>60</width>
                         <height>60</height>
-                        <label />
+                        <label>$LOCALIZE[10004]</label>
+                        <textcolor>00ffffff</textcolor>
+                        <focusedcolor>00ffffff</focusedcolor>
                         <onclick condition="Window.IsActive(videoinfo)">Dialog.Close(videoinfo)</onclick>
                         <onclick condition="Window.IsActive(addoninformation)">Dialog.Close(addoninformation)</onclick>
                         <onclick condition="Window.IsActive(musicinformation)">Dialog.Close(musicinformation)</onclick>
                         <onclick>ActivateWindow(settings)</onclick>
-                        <texturefocus colordiffuse="26ffffff">textures/white.png</texturefocus>
+                        <texturefocus colordiffuse="ffb83232">textures/white.png</texturefocus>
                         <texturenofocus />
                     </control>
                     <control type="image">
-                        <left>18</left>
-                        <top>18</top>
-                        <width>24</width>
-                        <height>24</height>
+                        <left>14</left>
+                        <top>14</top>
+                        <width>32</width>
+                        <height>32</height>
                         <texture>icons/settings.png</texture>
                         <aspectratio>keep</aspectratio>
                     </control>
                 </control>
             </control>
-            <control type="image">
+
+            <control type="group">
                 <left>104</left>
-                <top>120</top>
+                <top>178</top>
                 <width>316</width>
                 <height>48</height>
-                <texture colordiffuse="ff171c1f">textures/white.png</texture>
-                <visible>ControlGroup(9300).HasFocus</visible>
-            </control>
-            <control type="label">
-                <left>120</left>
-                <top>126</top>
-                <width>284</width>
-                <height>30</height>
-                <font>font20_title</font>
-                <label>$LOCALIZE[10000]</label>
-                <textcolor>fff1f5f3</textcolor>
                 <visible>Control.HasFocus(9301)</visible>
+                <control type="image">
+                    <width>316</width><height>48</height>
+                    <texture colordiffuse="ff171c1f">textures/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>16</left><top>9</top><width>284</width><height>30</height>
+                    <font>font25_title</font><label>$LOCALIZE[10000]</label>
+                    <textcolor>fff1f5f3</textcolor>
+                </control>
             </control>
-            <control type="label">
-                <left>120</left>
-                <top>126</top>
-                <width>284</width>
-                <height>30</height>
-                <font>font20_title</font>
-                <label>$LOCALIZE[31800]</label>
-                <textcolor>fff1f5f3</textcolor>
+            <control type="group">
+                <left>104</left>
+                <top>334</top>
+                <width>316</width>
+                <height>48</height>
                 <visible>Control.HasFocus(9302)</visible>
+                <control type="image">
+                    <width>316</width><height>48</height>
+                    <texture colordiffuse="ff171c1f">textures/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>16</left><top>9</top><width>284</width><height>30</height>
+                    <font>font25_title</font><label>$LOCALIZE[31802]</label>
+                    <textcolor>fff1f5f3</textcolor>
+                </control>
             </control>
-            <control type="label">
-                <left>120</left>
-                <top>126</top>
-                <width>284</width>
-                <height>30</height>
-                <font>font20_title</font>
-                <label>$LOCALIZE[31805]</label>
-                <textcolor>fff1f5f3</textcolor>
+            <control type="group">
+                <left>104</left>
+                <top>256</top>
+                <width>316</width>
+                <height>48</height>
+                <visible>Control.HasFocus(9308)</visible>
+                <control type="image">
+                    <width>316</width><height>48</height>
+                    <texture colordiffuse="ff171c1f">textures/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>16</left><top>9</top><width>284</width><height>30</height>
+                    <font>font25_title</font><label>$LOCALIZE[31801]</label>
+                    <textcolor>fff1f5f3</textcolor>
+                </control>
+            </control>
+            <control type="group">
+                <left>104</left>
+                <top>412</top>
+                <width>316</width>
+                <height>48</height>
                 <visible>Control.HasFocus(9303)</visible>
+                <control type="image">
+                    <width>316</width><height>48</height>
+                    <texture colordiffuse="ff171c1f">textures/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>16</left><top>9</top><width>284</width><height>30</height>
+                    <font>font25_title</font><label>$LOCALIZE[31805]</label>
+                    <textcolor>fff1f5f3</textcolor>
+                </control>
             </control>
-            <control type="label">
-                <left>120</left>
-                <top>126</top>
-                <width>284</width>
-                <height>30</height>
-                <font>font20_title</font>
-                <label>$LOCALIZE[31806]</label>
-                <textcolor>fff1f5f3</textcolor>
+            <control type="group">
+                <left>104</left>
+                <top>490</top>
+                <width>316</width>
+                <height>48</height>
                 <visible>Control.HasFocus(9304)</visible>
+                <control type="image">
+                    <width>316</width><height>48</height>
+                    <texture colordiffuse="ff171c1f">textures/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>16</left><top>9</top><width>284</width><height>30</height>
+                    <font>font25_title</font><label>$LOCALIZE[31806]</label>
+                    <textcolor>fff1f5f3</textcolor>
+                </control>
             </control>
-            <control type="label">
-                <left>120</left>
-                <top>126</top>
-                <width>284</width>
-                <height>30</height>
-                <font>font20_title</font>
-                <label>$LOCALIZE[31807]</label>
-                <textcolor>fff1f5f3</textcolor>
+            <control type="group">
+                <left>104</left>
+                <top>568</top>
+                <width>316</width>
+                <height>48</height>
                 <visible>Control.HasFocus(9305)</visible>
+                <control type="image">
+                    <width>316</width><height>48</height>
+                    <texture colordiffuse="ff171c1f">textures/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>16</left><top>9</top><width>284</width><height>30</height>
+                    <font>font25_title</font><label>$LOCALIZE[31807]</label>
+                    <textcolor>fff1f5f3</textcolor>
+                </control>
             </control>
-            <control type="label">
-                <left>120</left>
-                <top>126</top>
-                <width>284</width>
-                <height>30</height>
-                <font>font20_title</font>
-                <label>$LOCALIZE[31810]</label>
-                <textcolor>fff1f5f3</textcolor>
+            <control type="group">
+                <left>104</left>
+                <top>646</top>
+                <width>316</width>
+                <height>48</height>
                 <visible>Control.HasFocus(9306)</visible>
+                <control type="image">
+                    <width>316</width><height>48</height>
+                    <texture colordiffuse="ff171c1f">textures/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>16</left><top>9</top><width>284</width><height>30</height>
+                    <font>font25_title</font><label>$LOCALIZE[31810]</label>
+                    <textcolor>fff1f5f3</textcolor>
+                </control>
             </control>
-            <control type="label">
-                <left>120</left>
-                <top>126</top>
-                <width>284</width>
-                <height>30</height>
-                <font>font20_title</font>
-                <label>$LOCALIZE[10004]</label>
-                <textcolor>fff1f5f3</textcolor>
+            <control type="group">
+                <left>104</left>
+                <top>724</top>
+                <width>316</width>
+                <height>48</height>
                 <visible>Control.HasFocus(9307)</visible>
+                <control type="image">
+                    <width>316</width><height>48</height>
+                    <texture colordiffuse="ff171c1f">textures/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>16</left><top>9</top><width>284</width><height>30</height>
+                    <font>font25_title</font><label>$LOCALIZE[10004]</label>
+                    <textcolor>fff1f5f3</textcolor>
+                </control>
             </control>
             </control>
         </definition>
@@ -608,9 +744,9 @@
             <scrolltime tween="cubic" easing="out">220</scrolltime>
             <preloaditems>2</preloaditems>
             <onleft>9300</onleft>
-            <onright>51</onright>
-            <onup>9201</onup>
-            <ondown>9000</ondown>
+            <onright>noop</onright>
+            <onup>9203</onup>
+            <ondown>noop</ondown>
             <itemlayout width="236" height="410">
                 <control type="image">
                     <left>10</left>
@@ -714,6 +850,7 @@
                     <width>220</width>
                     <height>326</height>
                     <texture border="2" infill="false" colordiffuse="fff1f5f3">textures/white.png</texture>
+                    <visible>Control.HasFocus(51)</visible>
                 </control>
                 <control type="label">
                     <left>10</left>
@@ -824,16 +961,16 @@
                 <left>156</left>
                 <top>738</top>
                 <width>43%</width>
-                <height>130</height>
+                <bottom>110</bottom>
                 <font>font12</font>
                 <label>$VAR[LiquidSynopsis]</label>
                 <textcolor>ffb8bec3</textcolor>
             </control>
             <control type="label">
                 <left>156</left>
-                <top>893</top>
+                <top>570</top>
                 <width>43%</width>
-                <height>28</height>
+                <height>20</height>
                 <font>font_flag</font>
                 <label>$LOCALIZE[31809]  $INFO[ListItem.PercentPlayed]%</label>
                 <textcolor>ff9be3c0</textcolor>
@@ -849,9 +986,9 @@
             <pagecontrol>5199</pagecontrol>
             <scrolltime>180</scrolltime>
             <onleft>9300</onleft>
-            <onright>5199</onright>
-            <onup>9201</onup>
-            <ondown>9000</ondown>
+            <onright>9000</onright>
+            <onup>noop</onup>
+            <ondown>noop</ondown>
             <itemlayout width="740" height="88">
                 <control type="image">
                     <left>0</left>
@@ -907,13 +1044,15 @@
                     <width>740</width>
                     <height>80</height>
                     <texture colordiffuse="fff0f4f2">textures/white.png</texture>
+                    <visible>Control.HasFocus(50)</visible>
                 </control>
                 <control type="image">
                     <left>0</left>
                     <top>0</top>
                     <width>3</width>
                     <height>80</height>
-                    <texture colordiffuse="ff9be3c0">textures/white.png</texture>
+                    <texture colordiffuse="ffb83232">textures/white.png</texture>
+                    <visible>Control.HasFocus(50)</visible>
                 </control>
                 <control type="image">
                     <left>20</left>
@@ -930,7 +1069,7 @@
                     <height>31</height>
                     <font>font25_title</font>
                     <label>$VAR[LiquidItemTitle]</label>
-                    <textcolor>ff101416</textcolor>
+                    <textcolor>$VAR[LiquidRowTitleColor]</textcolor>
                     <scroll>true</scroll>
                 </control>
                 <control type="label">
@@ -940,7 +1079,7 @@
                     <height>25</height>
                     <font>font_flag</font>
                     <label>$VAR[LiquidRowSubtitle]</label>
-                    <textcolor>ff53605e</textcolor>
+                    <textcolor>$VAR[LiquidRowSubtitleColor]</textcolor>
                 </control>
                 <control type="progress">
                     <left>88</left>
@@ -967,7 +1106,7 @@
             <onright>9000</onright>
             <texturesliderbackground colordiffuse="22ffffff">textures/white.png</texturesliderbackground>
             <texturesliderbar colordiffuse="889eafb7">textures/white.png</texturesliderbar>
-            <texturesliderbarfocus colordiffuse="ffbce3d2">textures/white.png</texturesliderbarfocus>
+            <texturesliderbarfocus colordiffuse="ffb83232">textures/white.png</texturesliderbarfocus>
             <showonepage>false</showonepage>
             <visible>Control.IsVisible(50)</visible>
         </control>
@@ -997,7 +1136,7 @@
                 <top>124</top>
                 <width>424</width>
                 <height>2</height>
-                <texture colordiffuse="ff9be3c0">textures/white.png</texture>
+                <texture colordiffuse="ffb83232">textures/white.png</texture>
             </control>
             <control type="label">
                 <right>76</right>
@@ -1027,7 +1166,15 @@
             <alttexturefocus colordiffuse="fff2f5f4">textures/white.png</alttexturefocus>
             <alttexturenofocus />
         </control>
-        <control type="button" id="9401">
+        <control type="radiobutton" id="9401">
+            <selected>Skin.HasSetting(liquid_focus_mode)</selected>
+            <radioposx>324</radioposx>
+            <radiowidth>32</radiowidth>
+            <radioheight>32</radioheight>
+            <textureradioonfocus colordiffuse="ff101416">buttons/radio-button-on.png</textureradioonfocus>
+            <textureradioofffocus colordiffuse="ff101416">buttons/radio-button-off.png</textureradioofffocus>
+            <textureradioonnofocus colordiffuse="ff9be3c0">buttons/radio-button-on.png</textureradioonnofocus>
+            <textureradiooffnofocus colordiffuse="ffb8bec3">buttons/radio-button-off.png</textureradiooffnofocus>
             <include>LiquidMenuButton</include>
             <label>$LOCALIZE[31813]</label>
             <onclick>Skin.ToggleSetting(liquid_focus_mode)</onclick>
@@ -1046,6 +1193,12 @@
             <onclick condition="Control.IsVisible(51)">SetFocus(51)</onclick>
             <onclick>Action(ContextMenu)</onclick>
         </control>
+    </include>
+    <include name="LiquidOptionsReturn">
+        <onleft condition="Control.IsVisible(51)">51</onleft>
+        <onleft condition="!Control.IsVisible(51)">50</onleft>
+        <onback condition="Control.IsVisible(51)">51</onback>
+        <onback condition="!Control.IsVisible(51)">50</onback>
     </include>
     <include name="LiquidOptionsNavigation">
         <onleft condition="Control.IsVisible(51)">51</onleft>

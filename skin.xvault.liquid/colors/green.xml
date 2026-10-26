@@ -4,7 +4,7 @@
 	<color name="secondary_background">3300A3CC</color>
 	<color name="dialog_tint">FF1F2722</color>
 	<color name="dialog_header_tint">FF22995F</color>
-	<color name="button_focus">FF24CA7A</color>
-	<color name="button_alt_focus">8024CA7A</color>
+	<color name="button_focus">FFB83232</color>
+	<color name="button_alt_focus">80B83232</color>
 	<color name="selected">FF14D519</color>
 </colors>

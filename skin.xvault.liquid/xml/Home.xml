@@ -2,6 +2,8 @@
 <window>
 	<defaultcontrol always="true">9100</defaultcontrol>
 	<backgroundcolor>ff05070c</backgroundcolor>
+	<onload condition="String.IsEmpty(Window(Home).Property(liquid_home_initialized))">SetFocus(9100,0,absolute)</onload>
+	<onload>SetProperty(liquid_home_initialized,true,home)</onload>
 	<onload>Skin.SetBool(xvault_liquid_home_ready)</onload>
 	<controls>
 		<control type="group" id="9320">
@@ -85,10 +87,13 @@
 					<height>86</height>
 					<orientation>horizontal</orientation>
 					<itemgap>14</itemgap>
-					<onleft>9050</onleft>
+					<onleft>9300</onleft>
 					<onright>9050</onright>
 					<ondown>9000</ondown>
 					<control type="button" id="9051">
+						<onleft>9300</onleft>
+						<onright>9052</onright>
+						<ondown>9000</ondown>
 						<width>86</width>
 						<height>86</height>
 						<label></label>
@@ -97,6 +102,9 @@
 						<texturenofocus border="28">textures/tile.png</texturenofocus>
 					</control>
 					<control type="button" id="9052">
+						<onleft>9051</onleft>
+						<onright>9053</onright>
+						<ondown>9000</ondown>
 						<width>86</width>
 						<height>86</height>
 						<label></label>
@@ -105,6 +113,9 @@
 						<texturenofocus border="28">textures/tile.png</texturenofocus>
 					</control>
 					<control type="button" id="9053">
+						<onleft>9052</onleft>
+						<onright>9053</onright>
+						<ondown>9000</ondown>
 						<width>86</width>
 						<height>86</height>
 						<label></label>
@@ -243,8 +254,8 @@
 					<label></label>
 					<onclick>RunScript(special://skin/service.py,--open-spotlight)</onclick>
 					<onup>9050</onup>
-					<ondown condition="Library.HasContent(tvshows)">9350</ondown>
-					<ondown condition="!Library.HasContent(tvshows)">9100</ondown>
+					<ondown condition="Integer.IsGreater(Container(9350).NumItems,0)">9350</ondown>
+					<ondown condition="!Integer.IsGreater(Container(9350).NumItems,0)">9100</ondown>
 					<onleft>9300</onleft>
 					<onright>9000</onright>
 					<texturefocus colordiffuse="00ffffff">textures/white.png</texturefocus>
@@ -273,7 +284,7 @@
 				<onup>9000</onup>
 				<ondown>9100</ondown>
 				<onleft>9300</onleft>
-				<onright>9350</onright>
+				<onright>noop</onright>
 				<scrolltime tween="cubic" easing="out">360</scrolltime>
 				<visible>Library.HasContent(tvshows)</visible>
 				<itemlayout width="300" height="230">
@@ -320,6 +331,7 @@
 							<width>324</width>
 							<height>206</height>
 							<texture border="28">textures/poster-card-focus.png</texture>
+							<visible>Control.HasFocus(9350)</visible>
 						</control>
 						<control type="label">
 							<left>14</left>
@@ -351,10 +363,11 @@
 				<orientation>horizontal</orientation>
 				<focusposition>2</focusposition>
 				<movement>2</movement>
-				<onup>9000</onup>
-				<ondown>9050</ondown>
+				<onup condition="Integer.IsGreater(Container(9350).NumItems,0)">9350</onup>
+				<onup condition="!Integer.IsGreater(Container(9350).NumItems,0)">9000</onup>
+				<ondown>noop</ondown>
 				<onleft>9300</onleft>
-				<onright>9100</onright>
+				<onright>noop</onright>
 				<scrolltime tween="cubic" easing="out">320</scrolltime>
 				<itemlayout width="196" height="184">
 					<control type="image">
@@ -388,12 +401,14 @@
 					<control type="group">
 						<animation effect="zoom" start="100" end="112" center="auto" time="170" tween="sine" easing="out">Focus</animation>
 						<animation effect="zoom" start="112" end="100" center="auto" time="120" tween="sine" easing="in">UnFocus</animation>
+						<control type="image"><left>15</left><top>2</top><width>186</width><height>138</height><texture border="32">textures/tile.png</texture></control>
 						<control type="image">
 							<left>15</left>
 							<top>2</top>
 							<width>186</width>
 							<height>138</height>
 							<texture border="32">textures/tile-focus.png</texture>
+							<visible>Control.HasFocus(9100)</visible>
 						</control>
 						<control type="image">
 							<left>69</left>

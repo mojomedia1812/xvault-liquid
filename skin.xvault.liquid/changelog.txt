@@ -1,3 +1,14 @@
+[B]0.2.2[/B]
+- Extend movie and series list descriptions to the footer without overlapping playback status
+- Replace green focus highlights with red across native controls and Liquid focus accents
+- Order launcher video add-ons by last use, newest first; unused add-ons follow
+- Prioritize remote D-pad, OK, Back and native Menu/Info controls
+- Add direct series and movie shortcuts to the persistent rail with a distinct Home icon
+- Start Home on Series and follow visual rows when navigating vertically
+- Keep list boundaries in content and open view options to the right
+- Return from sidebar and options with Back without leaving the current folder
+- Show focus-mode state and avoid empty cast focus targets
+
 [B]0.2.1[/B]
 - Require xVAULT Video so Kodi installs missing copies through its dependency resolver
 - Update repository bootstrap to HTTPS and validate the official xVAULT package in release builds

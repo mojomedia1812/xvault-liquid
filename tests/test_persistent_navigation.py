@@ -19,7 +19,7 @@ class PersistentNavigationTests(unittest.TestCase):
             with self.subTest(window=name):
                 root = expanded_window(name + ".xml")
                 self.assertEqual(len(root.findall(".//control[@id='9300']")), 1)
-                for control_id in range(9301, 9308):
+                for control_id in range(9301, 9309):
                     self.assertEqual(len(root.findall(f".//control[@id='{control_id}']")), 1)
                 rail = root.find(".//control[@id='9300']")
                 self.assertIsNone(rail.find("visible"))
@@ -57,7 +57,7 @@ class PersistentNavigationTests(unittest.TestCase):
 
     def test_each_navigation_button_has_its_own_native_return_route(self):
         root = expanded_window("SettingsSystemInfo.xml")
-        for control_id in range(9301, 9308):
+        for control_id in range(9301, 9309):
             routes = root.findall(f".//control[@id='{control_id}']/onright")
             self.assertTrue(any(route.text == "95" for route in routes))
             self.assertNotIn("$PARAM", "".join(ET.tostring(route, encoding="unicode") for route in routes))

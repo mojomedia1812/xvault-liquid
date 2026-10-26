@@ -142,7 +142,7 @@
             <height>180</height>
             <orientation>horizontal</orientation>
             <onup>50</onup>
-            <ondown>9000</ondown>
+            <ondown>9600</ondown>
             <onleft>9300</onleft>
             <onright>9600</onright>
             <scrolltime>180</scrolltime>
@@ -192,7 +192,7 @@
                     <scroll>true</scroll>
                 </control>
             </focusedlayout>
-            <content target="videos">addons://sources/video/</content>
+            <content target="videos" sortby="lastused" sortorder="descending">addons://sources/video/</content>
         </control>
         <include>LiquidOptionsFrame</include>
         <control type="grouplist" id="9000">
@@ -213,7 +213,15 @@
                 <label>$LOCALIZE[24034]</label>
                 <onclick>UpdateAddonRepos</onclick>
             </control>
-            <control type="button" id="9401">
+            <control type="radiobutton" id="9401">
+                <selected>Skin.HasSetting(liquid_focus_mode)</selected>
+                <radioposx>324</radioposx>
+                <radiowidth>32</radiowidth>
+                <radioheight>32</radioheight>
+                <textureradioonfocus colordiffuse="ff101416">buttons/radio-button-on.png</textureradioonfocus>
+                <textureradioofffocus colordiffuse="ff101416">buttons/radio-button-off.png</textureradioofffocus>
+                <textureradioonnofocus colordiffuse="ff9be3c0">buttons/radio-button-on.png</textureradioonnofocus>
+                <textureradiooffnofocus colordiffuse="ffb8bec3">buttons/radio-button-off.png</textureradiooffnofocus>
                 <include>LiquidMenuButton</include>
                 <label>$LOCALIZE[31813]</label>
                 <onclick>Skin.ToggleSetting(liquid_focus_mode)</onclick>

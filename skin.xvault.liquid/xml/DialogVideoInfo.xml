@@ -117,6 +117,14 @@
 	            <label>$INFO[ListItem.Year]  $INFO[ListItem.Genre]  $INFO[ListItem.Duration, / ,]</label>
 	            <textcolor>ffb3c0c7</textcolor>
 	        </control>
+	        <control type="image">
+	            <left>464</left>
+	            <top>332</top>
+	            <right>88</right>
+	            <height>252</height>
+	            <texture border="2" infill="false" colordiffuse="ffb83232">textures/white.png</texture>
+	            <visible>Control.HasFocus(138)</visible>
+	        </control>
 	        <control type="textbox" id="138">
 	            <left>476</left>
 	            <top>344</top>
@@ -137,9 +145,10 @@
 	            <orientation>horizontal</orientation>
 	            <scrolltime>180</scrolltime>
 	            <onup>138</onup>
-	            <ondown>50</ondown>
+	            <ondown condition="Integer.IsGreater(Container(50).NumItems,0)">50</ondown>
+	            <ondown condition="!Integer.IsGreater(Container(50).NumItems,0)">5000</ondown>
 	            <onleft>9300</onleft>
-	            <onright>5000</onright>
+	            <onright>noop</onright>
 	            <itemlayout width="240" height="70">
 	                <control type="image">
 	                    <left>0</left>
@@ -259,9 +268,9 @@
 	            <height>176</height>
 	            <orientation>horizontal</orientation>
 	            <onup>5000</onup>
-	            <ondown>5000</ondown>
+	            <ondown>50</ondown>
 	            <onleft>9300</onleft>
-	            <onright>50</onright>
+	            <onright>noop</onright>
 	            <scrolltime>180</scrolltime>
 	            <itemlayout width="140" height="176">
 	                <control type="image">
